@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:movie_app/network/api_constants.dart';
+import 'package:movie_app/network/responses/get_now_playing_response.dart';
 import 'package:retrofit/retrofit.dart';
 part 'retrofit_the_movie_api.g.dart';
 
@@ -8,9 +9,9 @@ abstract class TheMovieApi {
   factory TheMovieApi(Dio dio) = _TheMovieApi;
 
   @GET(endPoint)
-  Future getNowPlayingMovies(
-    @Query(paramAPIKEY) String apiKey,
-    @Query(paramLanguage) String languageENUS,
-    @Query(paramPage) String page,
+  Future<GetNowPlayingResponse> getNowPlayingMovies(
+    @Query(paramAPIKEY) String paramAPIKEY,
+    @Query(paramLanguage) String paramLanguage,
+    @Query(paramPage) String paramPage,
   );
 }

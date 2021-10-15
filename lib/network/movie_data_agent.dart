@@ -1,3 +1,5 @@
+import 'package:movie_app/data.vos/movie_vo.dart';
+
 abstract class MovieDataAgent {
-  void getNowPlayingMovies(int page);
+  Future<List<MovieVO>> getNowPlayingMovies(int page);
 }
