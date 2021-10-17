@@ -7,7 +7,7 @@ import 'package:movie_app/pages/movie_details_app_bar_view.dart';
 import 'network/dio_movie_data_agent_impl.dart';
 
 void main() {
-  RetrofitDataAgentImpl().getNowPlayingMovies(1);
+  
   runApp(
     MyApp(),
   );

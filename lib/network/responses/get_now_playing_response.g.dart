@@ -9,9 +9,9 @@ part of 'get_now_playing_response.dart';
 GetNowPlayingResponse _$GetNowPlayingResponseFromJson(
         Map<String, dynamic> json) =>
     GetNowPlayingResponse(
-      dates: DateVO.fromJson(json['dates'] as Map<String, dynamic>),
-      page: json['page'] as int,
-      results: (json['results'] as List<dynamic>)
+      DateVO.fromJson(json['dates'] as Map<String, dynamic>),
+      json['page'] as int,
+      (json['results'] as List<dynamic>)
           .map((e) => MovieVO.fromJson(e as Map<String, dynamic>))
           .toList(),
     );

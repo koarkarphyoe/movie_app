@@ -38,7 +38,7 @@ class MovieVO {
   String title;
 
   @JsonKey(name: "video")
-  late bool video;
+  bool video;
 
   @JsonKey(name: "vote_average")
   double voteAverage;

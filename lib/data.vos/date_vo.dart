@@ -10,7 +10,7 @@ class DateVO {
   @JsonKey(name:"minimum")
   String minimum;
 
-  DateVO({required this.maximum,required this.minimum});
+  DateVO( this.maximum,this.minimum);
 
   factory DateVO.fromJson(Map<String,dynamic>json)=>_$DateVOFromJson(json);
   Map<String,dynamic>toJson()=>_$DateVOToJson(this);

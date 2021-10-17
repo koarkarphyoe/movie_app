@@ -6,16 +6,16 @@ part 'get_now_playing_response.g.dart';
 @JsonSerializable()
 class GetNowPlayingResponse {
   @JsonKey(name: "dates")
-  late DateVO dates;
+  DateVO dates;
 
   @JsonKey(name: "page")
-  late int page;
+  int page;
 
   @JsonKey(name: "results")
-  late List<MovieVO> results;
+  List<MovieVO> results;
 
   GetNowPlayingResponse(
-      {required this.dates, required this.page, required this.results});
+       this.dates, this.page,this.results);
 
   factory GetNowPlayingResponse.fromJson(Map<String, dynamic> json) =>
       _$GetNowPlayingResponseFromJson(json);

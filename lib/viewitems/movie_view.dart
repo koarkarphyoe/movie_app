@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/data.vos/movie_vo.dart';
 import 'package:movie_app/resources/dimens.dart';
 import 'package:movie_app/widgets/movie_rating_bar.dart';
 
 class MovieView extends StatelessWidget {
   final Function onTapImage;
-  MovieView(this.onTapImage);
+  final MovieVO mMovie;
+  MovieView(this.onTapImage, this.mMovie);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -14,11 +16,11 @@ class MovieView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
-            onTap: (){
+            onTap: () {
               onTapImage();
             },
             child: Image.network(
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnt0bHvCWQmOoCieTbnBya250f4A2G1TCr1HWHD929LxSft_hhGAsWw3FbjTLN3JjVvcE&usqp=CAU",
+              "${mMovie.posterPath}",
               fit: BoxFit.cover,
             ),
           ),
@@ -26,7 +28,7 @@ class MovieView extends StatelessWidget {
             height: MARGIN_MEDIUM,
           ),
           Text(
-            "Westworld",
+            "${mMovie.title}",
             style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: TEXT_REGULAR_2X,
@@ -45,7 +47,7 @@ class MovieView extends StatelessWidget {
                     color: Colors.white),
               ),
               SizedBox(
-               width: MARGIN_MEDIUM,
+                width: MARGIN_MEDIUM,
               ),
               MovieRatingBar(),
             ],
