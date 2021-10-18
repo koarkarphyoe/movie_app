@@ -23,8 +23,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  MovieModel mModel = MovieModelImpl();
+  
 
+  ///non nullable type
   List<String> genreList = [
     "Action",
     "Adventure",
@@ -33,8 +34,12 @@ class _HomePageState extends State<HomePage> {
     "Thriller",
     "Drama",
   ];
+  MovieModel mModel = MovieModelImpl();
 
+  ///nullable type
   List<MovieVO>? mNowPlayingMovieList;
+
+  ///nulll
   // int? a;
 
   @override
@@ -44,7 +49,9 @@ class _HomePageState extends State<HomePage> {
 
     mModel.getNowPlayingMovies(1).then((movieList) {
       setState(() {
-        mNowPlayingMovieList != movieList;
+        mNowPlayingMovieList = movieList;
+
+        ///get data form network
       });
     }).catchError((error) {
       debugPrint("Error ===> ${error.toString()}");
@@ -80,7 +87,7 @@ class _HomePageState extends State<HomePage> {
               SizedBox(height: MARGIN_MEDIUM),
               BestPopularMoviesAndSerialsSectionView(
                   () => _navigateToMovieDetailsPage(context),
-                  mNowPlayingMovieList!),
+                  mNowPlayingMovieList),
               SizedBox(height: MARGIN_MEDIUM),
               MovieShowtimesSectionView(),
               SizedBox(height: MARGIN_MEDIUM),
@@ -221,7 +228,7 @@ class ShowCasesSectionView extends StatelessWidget {
 
 class BestPopularMoviesAndSerialsSectionView extends StatelessWidget {
   final Function onTapImage;
-  final List<MovieVO> mMovieList;
+  final List<MovieVO>? mMovieList;
   BestPopularMoviesAndSerialsSectionView(this.onTapImage, this.mMovieList);
   @override
   Widget build(BuildContext context) {
@@ -245,7 +252,7 @@ class BestPopularMoviesAndSerialsSectionView extends StatelessWidget {
 
 class HorizontalMovieListView extends StatelessWidget {
   final Function onTapImage;
-  final List<MovieVO> mMovieList;
+  final List<MovieVO>? mMovieList;
   HorizontalMovieListView(this.onTapImage, {required this.mMovieList});
 
   @override
@@ -255,16 +262,15 @@ class HorizontalMovieListView extends StatelessWidget {
       height: MOVIE_LIST_HEIGHT,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: MARGIN_MEDIUM),
-        // ignore: unnecessary_null_comparison
         child: (mMovieList != null)
             ? ListView.builder(
                 scrollDirection: Axis.horizontal,
                 padding: EdgeInsets.only(left: MARGIN_MEDIUM_2),
-                itemCount: mMovieList.length,
+                itemCount: mMovieList?.length ?? 0,
                 itemBuilder: (BuildContext context, int index) {
                   return MovieView(() {
                     onTapImage();
-                  }, mMovieList[index]);
+                  }, mMovieList?[index]);
                 },
               )
             : Center(child: CircularProgressIndicator()),

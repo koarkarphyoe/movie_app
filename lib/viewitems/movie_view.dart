@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/data.vos/movie_vo.dart';
+import 'package:movie_app/network/api_constants.dart';
 import 'package:movie_app/resources/dimens.dart';
 import 'package:movie_app/widgets/movie_rating_bar.dart';
 
 class MovieView extends StatelessWidget {
   final Function onTapImage;
-  final MovieVO mMovie;
+  final MovieVO? mMovie;
   MovieView(this.onTapImage, this.mMovie);
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class MovieView extends StatelessWidget {
               onTapImage();
             },
             child: Image.network(
-              "${mMovie.posterPath}",
+              "$imageBaseUrl${mMovie!.posterPath}",
               fit: BoxFit.cover,
             ),
           ),
@@ -28,7 +29,7 @@ class MovieView extends StatelessWidget {
             height: MARGIN_MEDIUM,
           ),
           Text(
-            "${mMovie.title}",
+            "${mMovie!.title}",
             style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: TEXT_REGULAR_2X,

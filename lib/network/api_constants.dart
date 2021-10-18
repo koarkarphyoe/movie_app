@@ -1,14 +1,15 @@
 ///Base URL
 
 const String baseURLHTTP = "api.themoviedb.org";
-const String baseURLDio="https://api.themoviedb.org";
+const String baseURLDio = "https://api.themoviedb.org";
+const String imageBaseUrl = "http://image.tmdb.org/t/p/w400/";
 
 ///End Points
 const String endPoint = "/3/movie/now_playing";
 
 /// Parameters
 const String paramAPIKEY = "api_key";
-const String paramLanguage = "en-US";
+const String paramLanguage = "language";
 const String paramPage = "page";
 
 /// Constant Values
