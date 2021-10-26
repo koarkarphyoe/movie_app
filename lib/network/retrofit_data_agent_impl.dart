@@ -1,8 +1,8 @@
 // ignore: implementation_imports
 import 'package:dio/src/dio.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart';
 import 'package:movie_app/data.vos/movie_vo.dart';
+import 'package:movie_app/data.vos/vos/actor_vo.dart';
+import 'package:movie_app/data.vos/vos/results_vo.dart';
 import 'package:movie_app/network/api_constants.dart';
 import 'package:movie_app/network/retrofit_the_movie_api.dart';
 
@@ -18,7 +18,7 @@ class RetrofitDataAgentImpl extends MovieDataAgent {
   static final RetrofitDataAgentImpl _singleton =
       RetrofitDataAgentImpl._internal();
 
-  late TheMovieApi mApi;
+  late RetrofitTheMovieApi mApi;
 
   factory RetrofitDataAgentImpl() {
     return _singleton;
@@ -26,7 +26,7 @@ class RetrofitDataAgentImpl extends MovieDataAgent {
 
   RetrofitDataAgentImpl._internal() {
     final dio = Dio();
-    mApi = TheMovieApi(dio);
+    mApi = RetrofitTheMovieApi(dio);
   }
 
   @override
@@ -35,6 +35,33 @@ class RetrofitDataAgentImpl extends MovieDataAgent {
         .getNowPlayingMovies(apiKey, languageENUS, page.toString())
         .asStream()
         .map((response) => response.results)
+        .first;
+  }
+
+  @override
+  Future<List<ResultsVO>> getPopularMovies(int page) {
+    return mApi
+        .getPopularMovies(apiKey, languageENUS, page.toString())
+        .asStream()
+        .map((event) => event.results)
+        .first;
+  }
+
+  @override
+  Future<List<ActorVO>> getActors(int page) {
+    return mApi
+        .getActors(apiKey, languageENUS, page.toString())
+        .asStream()
+        .map((response) => response.results)
+        .first;
+  }
+
+  @override
+  Future<List<MovieVO>> getTopRated(int page) {
+    return mApi
+        .getTopRated(apiKey, languageENUS, page.toString())
+        .asStream()
+        .map((event) => event.results)
         .first;
   }
 }

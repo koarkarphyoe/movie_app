@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:movie_app/data.vos/models/movie_model.dart';
 import 'package:movie_app/data.vos/models/movie_model_impl.dart';
 import 'package:movie_app/data.vos/movie_vo.dart';
+import 'package:movie_app/data.vos/vos/actor_vo.dart';
+import 'package:movie_app/data.vos/vos/results_vo.dart';
 import 'package:movie_app/resources/colors.dart';
 import 'package:movie_app/resources/dimens.dart';
 import 'package:movie_app/resources/strings.dart';
@@ -23,8 +25,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  
-
   ///non nullable type
   List<String> genreList = [
     "Action",
@@ -38,6 +38,9 @@ class _HomePageState extends State<HomePage> {
 
   ///nullable type
   List<MovieVO>? mNowPlayingMovieList;
+  List<ActorVO>? mActorList;
+  List<ResultsVO>? mResults;
+  List<MovieVO>? topRated;
 
   ///nulll
   // int? a;
@@ -47,14 +50,45 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     // print(a! + 1);
 
+    ///now playing
     mModel.getNowPlayingMovies(1).then((movieList) {
       setState(() {
         mNowPlayingMovieList = movieList;
-
-        ///get data form network
       });
     }).catchError((error) {
       debugPrint("Error ===> ${error.toString()}");
+    });
+
+    mModel
+        .getPopularMovies(1)
+        .then((value) => {
+              setState(() {
+                mResults = value;
+              })
+            })
+        .catchError((error) {
+      debugPrint("Error ===> ${error.toString()}");
+    });
+
+    ///Actor
+    mModel.getActors(1).then((actor) {
+      setState(() {
+        mActorList = actor;
+      });
+    }).catchError((error) {
+      debugPrint("Error ==> ${error.toString()}");
+    });
+
+    ///For ShowCaseSection
+    mModel
+        .getTopRated(1)
+        .then((value) => {
+              setState(() {
+                topRated = value;
+              })
+            })
+        .catchError((error) {
+      debugPrint("Error====>${error.toString()}");
     });
   }
 
@@ -83,20 +117,27 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              BannerSectionView(),
+              BannerSectionView(
+                mResults: mResults,
+              ),
               SizedBox(height: MARGIN_MEDIUM),
               BestPopularMoviesAndSerialsSectionView(
-                  () => _navigateToMovieDetailsPage(context),
-                  mNowPlayingMovieList),
+                () => _navigateToMovieDetailsPage(context),
+                mNowPlayingMovieList,
+              ),
               SizedBox(height: MARGIN_MEDIUM),
               MovieShowtimesSectionView(),
               SizedBox(height: MARGIN_MEDIUM),
               GenreSectionView(() => _navigateToMovieDetailsPage(context),
                   genreList: genreList),
               SizedBox(height: MARGIN_MEDIUM),
-              ShowCasesSectionView(),
+              ShowCasesSectionView(topRated),
               SizedBox(height: MARGIN_MEDIUM_XLARGE),
-              ActorsAndCreatorsView(BEST_ACTORS_TEXT, MORE_ACTORS_TEXT),
+              ActorsAndCreatorsView(
+                BEST_ACTORS_TEXT,
+                MORE_ACTORS_TEXT,
+                mActorList: mActorList,
+              ),
               SizedBox(height: MARGIN_MEDIUM),
             ],
           ),
@@ -197,6 +238,10 @@ class MovieShowtimesSectionView extends StatelessWidget {
 }
 
 class ShowCasesSectionView extends StatelessWidget {
+  final List<MovieVO>? topRated;
+
+  ShowCasesSectionView(this.topRated);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -213,11 +258,12 @@ class ShowCasesSectionView extends StatelessWidget {
             child: ListView(
               padding: EdgeInsets.only(left: MARGIN_MEDIUM_2),
               scrollDirection: Axis.horizontal,
-              children: [
-                ShowCasesView(),
-                ShowCasesView(),
-                ShowCasesView(),
-              ],
+              children: topRated?.map((e) => ShowCasesView(e)).toList() ?? [],
+              // [
+              //   ShowCasesView(),
+              //   ShowCasesView(),
+              //   ShowCasesView(),
+              // ],
             ),
           ),
         ],
@@ -229,6 +275,7 @@ class ShowCasesSectionView extends StatelessWidget {
 class BestPopularMoviesAndSerialsSectionView extends StatelessWidget {
   final Function onTapImage;
   final List<MovieVO>? mMovieList;
+
   BestPopularMoviesAndSerialsSectionView(this.onTapImage, this.mMovieList);
   @override
   Widget build(BuildContext context) {
@@ -242,9 +289,12 @@ class BestPopularMoviesAndSerialsSectionView extends StatelessWidget {
         SizedBox(
           height: MARGIN_MEDIUM,
         ),
-        HorizontalMovieListView(() {
-          onTapImage();
-        }, mMovieList: mMovieList)
+        HorizontalMovieListView(
+          () {
+            onTapImage();
+          },
+          mMovieList: mMovieList,
+        )
       ],
     );
   }
@@ -253,7 +303,11 @@ class BestPopularMoviesAndSerialsSectionView extends StatelessWidget {
 class HorizontalMovieListView extends StatelessWidget {
   final Function onTapImage;
   final List<MovieVO>? mMovieList;
-  HorizontalMovieListView(this.onTapImage, {required this.mMovieList});
+
+  HorizontalMovieListView(
+    this.onTapImage, {
+    required this.mMovieList,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -279,25 +333,41 @@ class HorizontalMovieListView extends StatelessWidget {
   }
 }
 
-class BannerSectionView extends StatelessWidget {
+class BannerSectionView extends StatefulWidget {
+  final List<ResultsVO>? mResults;
+  BannerSectionView({this.mResults});
+
+  @override
+  State<BannerSectionView> createState() => _BannerSectionViewState();
+}
+
+class _BannerSectionViewState extends State<BannerSectionView> {
+  double _position = 0;
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
-          height: MediaQuery.of(context).size.height / 4,
+          height: MediaQuery.of(context).size.height / 3,
           child: PageView(
-            children: [
-              BannerView(),
-              BannerView(),
-            ],
+            onPageChanged: (page) {
+              setState(() {
+                _position = page.toDouble();
+              });
+            },
+            children:
+                widget.mResults?.map((movie) => BannerView(movie)).toList() ??
+                    [],
           ),
         ),
         SizedBox(height: MARGIN_MEDIUM),
         DotsIndicator(
-          dotsCount: 2,
-          position: 0,
+          dotsCount: widget.mResults?.length ?? 1,
+          position: _position,
+          mainAxisSize: MainAxisSize.max,
           decorator: DotsDecorator(
+              size: Size.square(5.0),
+              activeSize: Size.square(15.0),
               activeColor: PLAY_BUTTON_COLOR,
               color: DOTS_INDICATOR_INACTIVE_COLOR),
         )

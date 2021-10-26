@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/resources/colors.dart';
+import 'package:movie_app/data.vos/vos/results_vo.dart';
+import 'package:movie_app/network/api_constants.dart';
 import 'package:movie_app/resources/dimens.dart';
 import 'package:movie_app/widgets/banner_play_button.dart';
 import 'package:movie_app/widgets/gradient_view.dart';
 
 class BannerView extends StatelessWidget {
-  const BannerView({Key? key}) : super(key: key);
+  final ResultsVO? mResults;
+
+  BannerView(this.mResults);
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Positioned.fill(
-          child: BannerImageView(),
+          child: BannerImageView(mResults: mResults),
         ),
         Positioned.fill(
           child: GradientView(),
         ),
         Align(
           alignment: Alignment.bottomLeft,
-          child: BannerTitleView(),
+          child: BannerTitleView(mResults: mResults),
         ),
         Align(
           alignment: Alignment.center,
@@ -30,9 +33,26 @@ class BannerView extends StatelessWidget {
   }
 }
 
+class BannerImageView extends StatelessWidget {
+  const BannerImageView({
+    Key? key,
+    required this.mResults,
+  }) : super(key: key);
 
+  final ResultsVO? mResults;
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.network(
+      "$imageBaseUrl${mResults!.posterPath}",
+      fit: BoxFit.cover,
+    );
+  }
+}
 
 class BannerTitleView extends StatelessWidget {
+  final ResultsVO? mResults;
+  BannerTitleView({this.mResults});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -42,7 +62,7 @@ class BannerTitleView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "The Wolverine 2013.",
+            "${mResults!.originalTitle}",
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
@@ -57,16 +77,6 @@ class BannerTitleView extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class BannerImageView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Image.network(
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnt0bHvCWQmOoCieTbnBya250f4A2G1TCr1HWHD929LxSft_hhGAsWw3FbjTLN3JjVvcE&usqp=CAU",
-      fit: BoxFit.cover,
     );
   }
 }

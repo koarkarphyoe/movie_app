@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/data.vos/vos/actor_vo.dart';
 import 'package:movie_app/resources/colors.dart';
 import 'package:movie_app/resources/dimens.dart';
 import 'package:movie_app/resources/strings.dart';
@@ -8,6 +9,8 @@ import 'package:movie_app/widgets/movie_rating_bar.dart';
 import 'package:movie_app/widgets/title_text.dart';
 
 class MovieDetailsPage extends StatelessWidget {
+  late final List<ActorVO> mActorList;
+
   @override
   Widget build(BuildContext context) {
     final List<String> genreList = ["Family", "Fantasy", "Adventure"];
@@ -44,7 +47,7 @@ class MovieDetailsPage extends StatelessWidget {
                   ),
                   ActorsAndCreatorsView(
                     MOVIE_DETAILS_ACTORS,
-                    "",
+                    "",mActorList: [],
                     showMoreTextVisility: false,
                   ),
                   Container(
@@ -52,7 +55,7 @@ class MovieDetailsPage extends StatelessWidget {
                     child: AboutFilmSectionView(),
                   ),
                   ActorsAndCreatorsView(
-                      MOVIE_DETAILS_CREATORS, MOVIE_DETAILS_MORE_CREATORS),
+                      MOVIE_DETAILS_CREATORS, MOVIE_DETAILS_MORE_CREATORS, mActorList: [],),
                 ],
               ),
             ),
