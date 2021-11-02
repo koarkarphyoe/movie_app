@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/data.vos/vos/results_vo.dart';
+import 'package:movie_app/data.vos/movie_vo.dart';
 import 'package:movie_app/network/api_constants.dart';
 import 'package:movie_app/resources/dimens.dart';
 import 'package:movie_app/widgets/banner_play_button.dart';
 import 'package:movie_app/widgets/gradient_view.dart';
 
 class BannerView extends StatelessWidget {
-  final ResultsVO? mResults;
+  final MovieVO? mResults;
 
   BannerView(this.mResults);
 
@@ -39,7 +39,7 @@ class BannerImageView extends StatelessWidget {
     required this.mResults,
   }) : super(key: key);
 
-  final ResultsVO? mResults;
+  final MovieVO? mResults;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class BannerImageView extends StatelessWidget {
 }
 
 class BannerTitleView extends StatelessWidget {
-  final ResultsVO? mResults;
+  final MovieVO? mResults;
   BannerTitleView({this.mResults});
   @override
   Widget build(BuildContext context) {

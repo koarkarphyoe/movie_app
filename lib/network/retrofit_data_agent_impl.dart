@@ -2,7 +2,7 @@
 import 'package:dio/src/dio.dart';
 import 'package:movie_app/data.vos/movie_vo.dart';
 import 'package:movie_app/data.vos/vos/actor_vo.dart';
-import 'package:movie_app/data.vos/vos/results_vo.dart';
+import 'package:movie_app/data.vos/vos/genre_vo.dart';
 import 'package:movie_app/network/api_constants.dart';
 import 'package:movie_app/network/retrofit_the_movie_api.dart';
 
@@ -39,7 +39,7 @@ class RetrofitDataAgentImpl extends MovieDataAgent {
   }
 
   @override
-  Future<List<ResultsVO>> getPopularMovies(int page) {
+  Future<List<MovieVO>> getPopularMovies(int page) {
     return mApi
         .getPopularMovies(apiKey, languageENUS, page.toString())
         .asStream()
@@ -60,6 +60,24 @@ class RetrofitDataAgentImpl extends MovieDataAgent {
   Future<List<MovieVO>> getTopRated(int page) {
     return mApi
         .getTopRated(apiKey, languageENUS, page.toString())
+        .asStream()
+        .map((event) => event.results)
+        .first;
+  }
+
+  @override
+  Future<List<GenreVO>> getGenres() {
+    return mApi
+        .getGenres(apiKey, languageENUS)
+        .asStream()
+        .map((event) => event.genres)
+        .first;
+  }
+
+  @override
+  Future<List<MovieVO>> getMovieByGenres(int genreId) {
+    return mApi
+        .getMovieByGenres(genreId.toString(), apiKey, languageENUS)
         .asStream()
         .map((event) => event.results)
         .first;

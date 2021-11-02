@@ -15,9 +15,9 @@ void main() {
   //     .getPopularMovies(1)
   //     .then((value) => value.map((e) => print(e.title)).toList());
 
-  MovieModelImpl()
-      .getTopRated(1)
-      .then((value) => value.map((e) => print(e.posterPath)).toList());
+  // MovieModelImpl()
+  //     .getNowPlayingMovies(1)
+  //     .then((value) => value.map((e) => print(e.posterPath)).toList());
 
   runApp(
     MyApp(),

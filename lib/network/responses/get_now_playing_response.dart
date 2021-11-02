@@ -14,8 +14,7 @@ class GetNowPlayingResponse {
   @JsonKey(name: "results")
   List<MovieVO> results;
 
-  GetNowPlayingResponse(
-       this.dates, this.page,this.results);
+  GetNowPlayingResponse(this.dates, this.page, this.results);
 
   factory GetNowPlayingResponse.fromJson(Map<String, dynamic> json) =>
       _$GetNowPlayingResponseFromJson(json);
