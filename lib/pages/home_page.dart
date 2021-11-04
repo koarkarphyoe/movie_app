@@ -25,6 +25,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  /// Create Object for Model Components
   MovieModel mModel = MovieModelImpl();
 
   ///nullable type
@@ -36,6 +38,7 @@ class _HomePageState extends State<HomePage> {
   ///for Genres title and movie list
   List<GenreVO>? mGenreList;
   List<MovieVO>? mMovieByGenre;
+
 
   ///nulll
   // int? a;
@@ -143,14 +146,14 @@ class _HomePageState extends State<HomePage> {
               ),
               SizedBox(height: MARGIN_MEDIUM),
               BestPopularMoviesAndSerialsSectionView(
-                () => _navigateToMovieDetailsPage(context),
+                (movieId) => _navigateToMovieDetailsPage(context,movieId),
                 mNowPlayingMovieList,
               ),
               SizedBox(height: MARGIN_MEDIUM),
               MovieShowtimesSectionView(),
               SizedBox(height: MARGIN_MEDIUM),
               GenreSectionView(
-                () => _navigateToMovieDetailsPage(context),
+              (movieId) => _navigateToMovieDetailsPage(context,movieId),
                 mGenreList,
                 mMovieByGenre,
                 onTapGenre: (int) {
@@ -173,11 +176,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<dynamic> _navigateToMovieDetailsPage(BuildContext context) {
+  Future<dynamic> _navigateToMovieDetailsPage(BuildContext context, int movieId) {
     return Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => MovieDetailsPage(),
+        builder: (context) => MovieDetailsPage(movieId),
       ),
     );
   }
@@ -223,8 +226,8 @@ class GenreSectionView extends StatelessWidget {
                 [],
           ),
         ),
-        HorizontalMovieListView(() {
-          onTapImage();
+        HorizontalMovieListView((movieId) {
+          onTapImage(movieId);
         }, mMovieList: movieList),
       ],
     );
@@ -303,7 +306,7 @@ class ShowCasesSectionView extends StatelessWidget {
 }
 
 class BestPopularMoviesAndSerialsSectionView extends StatelessWidget {
-  final Function onTapImage;
+  final Function(int) onTapImage;
   final List<MovieVO>? mMovieList;
 
   BestPopularMoviesAndSerialsSectionView(this.onTapImage, this.mMovieList);
@@ -320,8 +323,8 @@ class BestPopularMoviesAndSerialsSectionView extends StatelessWidget {
           height: MARGIN_MEDIUM,
         ),
         HorizontalMovieListView(
-          () {
-            onTapImage();
+          (movieId) {
+            onTapImage(movieId);
           },
           mMovieList: mMovieList,
         )
@@ -331,7 +334,7 @@ class BestPopularMoviesAndSerialsSectionView extends StatelessWidget {
 }
 
 class HorizontalMovieListView extends StatelessWidget {
-  final Function onTapImage;
+  final Function(int) onTapImage;
   final List<MovieVO>? mMovieList;
 
   HorizontalMovieListView(
@@ -352,8 +355,8 @@ class HorizontalMovieListView extends StatelessWidget {
                 padding: EdgeInsets.only(left: MARGIN_MEDIUM_2),
                 itemCount: mMovieList?.length ?? 0,
                 itemBuilder: (BuildContext context, int index) {
-                  return MovieView(() {
-                    onTapImage();
+                  return MovieView((movieId) {
+                    this.onTapImage(movieId);
                   }, mMovieList?[index]);
                 },
               )

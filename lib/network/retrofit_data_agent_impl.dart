@@ -2,6 +2,7 @@
 import 'package:dio/src/dio.dart';
 import 'package:movie_app/data.vos/movie_vo.dart';
 import 'package:movie_app/data.vos/vos/actor_vo.dart';
+import 'package:movie_app/data.vos/vos/credit_vo.dart';
 import 'package:movie_app/data.vos/vos/genre_vo.dart';
 import 'package:movie_app/network/api_constants.dart';
 import 'package:movie_app/network/retrofit_the_movie_api.dart';
@@ -81,5 +82,21 @@ class RetrofitDataAgentImpl extends MovieDataAgent {
         .asStream()
         .map((event) => event.results)
         .first;
+  }
+
+  @override
+  Future<List<CreditVO>> getCreditsByMovie(int movieId) {
+    return mApi
+        .getCreditsByMovie(
+            movieId.toString(), apiKey, languageENUS, 1.toString())
+        .asStream()
+        .map((event) => event.cast)
+        .first;
+  }
+
+  @override
+  Future<MovieVO> getMovieDetails(int movieId) {
+    return mApi.getMovieDetails(
+        movieId.toString(), apiKey, languageENUS, 1.toString());
   }
 }

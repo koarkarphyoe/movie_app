@@ -2,7 +2,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'credit_vo.g.dart';
 
-
 @JsonSerializable()
 class CreditVO {
   @JsonKey(name: "adult")
@@ -55,6 +54,17 @@ class CreditVO {
       this.creditId,
       this.order);
 
-      factory CreditVO.fromJson(Map<String, dynamic> json) => _$CreditVOFromJson(json);
+  factory CreditVO.fromJson(Map<String, dynamic> json) =>
+      _$CreditVOFromJson(json);
   Map<String, dynamic> toJson() => _$CreditVOToJson(this);
+
+  bool isActor() {
+    return knownForDepartment == KNOWN_FOR_DEPARTMENT_ACTING;
+  }
+
+  bool isCreator() {
+    return knownForDepartment != KNOWN_FOR_DEPARTMENT_ACTING;
+  }
 }
+
+const String KNOWN_FOR_DEPARTMENT_ACTING = "Acting";

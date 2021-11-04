@@ -5,10 +5,10 @@ part 'get_credits_by_movie_response.g.dart';
 @JsonSerializable()
 class GetCreditsByMovieResponse {
   @JsonKey(name: "id")
-  int? id;
+  int id;
 
   @JsonKey(name: "cast")
-  List<CreditVO>? cast;
+  List<CreditVO> cast;
 
   GetCreditsByMovieResponse(this.cast, this.id);
   factory GetCreditsByMovieResponse.fromJson(Map<String, dynamic> json) =>
