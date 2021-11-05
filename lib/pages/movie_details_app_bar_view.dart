@@ -53,7 +53,6 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> genreList = ["Family", "Fantasy", "Adventure"];
     return Scaffold(
       body: Container(
         color: SCREEN_BODY_BACKGROUND_COLOR,
@@ -65,7 +64,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                   SliverAppBar(
                     automaticallyImplyLeading: false,
                     collapsedHeight: SLIVER_APP_BAR_COLLAPSED_HEIGHT,
-                    expandedHeight: SLIVER_APP_BAR_EXPANDED_HEIGHT,
+                    expandedHeight: MediaQuery.of(context).size.height / 2,
                     backgroundColor: PRIMARY_COLOR,
                     flexibleSpace: MovieDetailsScreenSectionView(() {
                       Navigator.pop(context);
@@ -80,7 +79,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                               bottom: MARGIN_MEDIUM_XLARGE),
                           child: Column(
                             children: [
-                              MovieTimeAndGenreView(genreList: genreList),
+                              MovieTimeAndGenreView(mMovie),
                               SizedBox(height: MARGIN_MEDIUM_XLARGE),
                               StorylineSectionView(),
                               SizedBox(height: MARGIN_MEDIUM_LARGE),
@@ -266,41 +265,70 @@ class StorylineSectionView extends StatelessWidget {
 }
 
 class MovieTimeAndGenreView extends StatelessWidget {
-  const MovieTimeAndGenreView({
-    Key? key,
-    required this.genreList,
-  }) : super(key: key);
+  final MovieVO? mMovie;
 
-  final List<String> genreList;
+  MovieTimeAndGenreView(this.mMovie);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(Icons.access_time, color: PLAY_BUTTON_COLOR),
-        SizedBox(width: MARGIN_SMALL),
-        Text(
-          "2h 13min",
-          style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: TEXT_REGULAR_2X),
-        ),
-        SizedBox(width: MARGIN_MEDIUM),
-        Row(
-          children: genreList.map((genre) => GenreChipView(genre)).toList(),
-        ),
-        Spacer(),
-        Padding(
-          padding: const EdgeInsets.only(right: MARGIN_MEDIUM),
-          child: Icon(
-            Icons.favorite_border,
-            color: Colors.white,
-            size: FAVORITE_ICON_SIZE,
-          ),
-        ),
-      ],
+    return Wrap(
+      alignment: WrapAlignment.start,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      direction: Axis.horizontal,
+      children: _createMovieTimeAndGenreWidget(),
     );
+    // return Row(
+    //   children: [
+    //     Icon(Icons.access_time, color: PLAY_BUTTON_COLOR),
+    //     SizedBox(width: MARGIN_SMALL),
+    //     Text(
+    //       "2h 13min",
+    //       style: TextStyle(
+    //           color: Colors.white,
+    //           fontWeight: FontWeight.bold,
+    //           fontSize: TEXT_REGULAR_2X),
+    //     ),
+    //     SizedBox(width: MARGIN_MEDIUM),
+    //     Row(
+    //       children:mMovie!.genres!.map((e) => GenreChipView(e.name)).toList() ,
+    //       // genreList.map((genre) => GenreChipView(genre)).toList(),
+    //     ),
+    //     Spacer(),
+    //     Padding(
+    //       padding: const EdgeInsets.only(right: MARGIN_MEDIUM),
+    //       child: Icon(
+    //         Icons.favorite_border,
+    //         color: Colors.white,
+    //         size: FAVORITE_ICON_SIZE,
+    //       ),
+    //     ),
+    //   ],
+    // );
+  }
+
+  /// 1.to solve chip's view overflow , 2.flutter is running with ,so view widgets can use as list
+  List<Widget> _createMovieTimeAndGenreWidget() {
+    List<Widget> widgets = [
+      Icon(Icons.access_time, color: PLAY_BUTTON_COLOR),
+      SizedBox(width: MARGIN_SMALL),
+      Text(
+        "2h 13min",
+        style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: TEXT_REGULAR_2X),
+      ),
+      SizedBox(width: MARGIN_MEDIUM),
+    ];
+    widgets.addAll(mMovie!.genres!.map((e) => GenreChipView(e.name)).toList());
+    widgets.add(
+      Icon(
+        Icons.favorite_border,
+        color: Colors.white,
+        size: FAVORITE_ICON_SIZE,
+      ),
+    );
+    return widgets;
   }
 }
 
@@ -328,7 +356,7 @@ class GenreChipView extends StatelessWidget {
 
 class MovieDetailsScreenSectionView extends StatelessWidget {
   final Function onTapBack;
-  MovieVO? mMovie;
+  final MovieVO? mMovie;
   MovieDetailsScreenSectionView(this.onTapBack, this.mMovie);
   @override
   Widget build(BuildContext context) {
@@ -366,7 +394,7 @@ class MovieDetailsScreenSectionView extends StatelessWidget {
               right: MARGIN_MEDIUM_LARGE,
               bottom: MARGIN_MEDIUM_LARGE,
             ),
-            child: MovieDetailsYearAndVotesView(),
+            child: MovieDetailsYearAndVotesView(mMovie),
           ),
         ),
       ],
@@ -375,6 +403,9 @@ class MovieDetailsScreenSectionView extends StatelessWidget {
 }
 
 class MovieDetailsYearAndVotesView extends StatelessWidget {
+  final MovieVO? mMovie;
+  MovieDetailsYearAndVotesView(this.mMovie);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -390,7 +421,8 @@ class MovieDetailsYearAndVotesView extends StatelessWidget {
                 borderRadius:
                     BorderRadius.circular(MOVIE_DETAILS_PLAY_BUTTON_HEIGHT_2),
               ),
-              child: MovieDeatilsYearButtonView(),
+              child: MovieDeatilsYearButtonView(
+                  mMovie!.releaseDate!.substring(0, 4)),
             ),
             Spacer(),
             Row(
@@ -399,12 +431,12 @@ class MovieDetailsYearAndVotesView extends StatelessWidget {
                   children: [
                     SizedBox(height: MARGIN_MEDIUM),
                     MovieRatingBar(),
-                    TitleText("38876 VOTES"),
+                    TitleText("${mMovie!.voteCount} VOTES"),
                   ],
                 ),
                 SizedBox(width: MARGIN_MEDIUM),
                 Text(
-                  "9,75",
+                  mMovie!.voteAverage.toString(),
                   style: TextStyle(
                       color: Colors.white, fontSize: MOVIE_DETAILS_RATING_TEXT),
                 ),
@@ -413,20 +445,23 @@ class MovieDetailsYearAndVotesView extends StatelessWidget {
           ],
         ),
         SizedBox(height: MARGIN_MEDIUM_XLARGE),
-        MovieDetailsTitleTextView(),
+        MovieDetailsTitleTextView(mMovie!.title.toString()),
       ],
     );
   }
 }
 
 class MovieDeatilsYearButtonView extends StatelessWidget {
+  final String mMovieYear;
+
+  MovieDeatilsYearButtonView(this.mMovieYear);
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_LARGE),
       child: Center(
         child: Text(
-          "2016",
+          mMovieYear,
           style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -438,10 +473,13 @@ class MovieDeatilsYearButtonView extends StatelessWidget {
 }
 
 class MovieDetailsTitleTextView extends StatelessWidget {
+  final String mMovieTitle;
+  MovieDetailsTitleTextView(this.mMovieTitle);
+
   @override
   Widget build(BuildContext context) {
     return Text(
-      "The Wolverine",
+      mMovieTitle,
       style: TextStyle(
           fontSize: TEXT_REGULAR_5X,
           color: Colors.white,
