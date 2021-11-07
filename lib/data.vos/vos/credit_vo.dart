@@ -1,58 +1,62 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:movie_app/data.vos/vos/base_vo.dart';
 
 part 'credit_vo.g.dart';
 
 @JsonSerializable()
-class CreditVO {
+class CreditVO extends BaseVO {
   @JsonKey(name: "adult")
-  bool? adult;
+  bool adult;
 
   @JsonKey(name: "gender")
-  int? gender;
+  int gender;
 
   @JsonKey(name: "id")
-  int? id;
+  int id;
 
   @JsonKey(name: "known_for_department")
-  String? knownForDepartment;
+  String knownForDepartment;
 
-  @JsonKey(name: "name")
-  String? name;
+  // not need after extends from BaseVO
+  // @JsonKey(name: "name")
+  // String? name;
 
   @JsonKey(name: "original_name")
-  String? originalName;
+  String originalName;
 
   @JsonKey(name: "popularity")
-  double? popularity;
+  double popularity;
 
-  @JsonKey(name: "profile_path")
-  String? profilePath;
+  // not need after extends from BaseVO
+  // @JsonKey(name: "profile_path")
+  // String? profilePath;
 
   @JsonKey(name: "cast_id")
-  int? castId;
+  int castId;
 
   @JsonKey(name: "character")
-  String? character;
+  String character;
 
   @JsonKey(name: "credit_id")
-  String? creditId;
+  String creditId;
 
   @JsonKey(name: "order")
-  int? order;
+  int order;
 
   CreditVO(
       this.adult,
       this.gender,
       this.id,
       this.knownForDepartment,
-      this.name,
       this.originalName,
       this.popularity,
-      this.profilePath,
+      String? name,
+      String? profilePath,
       this.castId,
       this.character,
       this.creditId,
-      this.order);
+      this.order)
+      : super(name, profilePath);
 
   factory CreditVO.fromJson(Map<String, dynamic> json) =>
       _$CreditVOFromJson(json);

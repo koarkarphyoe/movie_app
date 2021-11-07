@@ -5,6 +5,7 @@ import 'package:movie_app/data.vos/models/movie_model.dart';
 import 'package:movie_app/data.vos/models/movie_model_impl.dart';
 import 'package:movie_app/data.vos/movie_vo.dart';
 import 'package:movie_app/data.vos/vos/actor_vo.dart';
+import 'package:movie_app/data.vos/vos/base_vo.dart';
 import 'package:movie_app/data.vos/vos/genre_vo.dart';
 import 'package:movie_app/resources/colors.dart';
 import 'package:movie_app/resources/dimens.dart';
@@ -25,7 +26,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   /// Create Object for Model Components
   MovieModel mModel = MovieModelImpl();
 
@@ -38,7 +38,6 @@ class _HomePageState extends State<HomePage> {
   ///for Genres title and movie list
   List<GenreVO>? mGenreList;
   List<MovieVO>? mMovieByGenre;
-
 
   ///nulll
   // int? a;
@@ -72,7 +71,7 @@ class _HomePageState extends State<HomePage> {
         mActorList = actor;
       });
     }).catchError((error) {
-      debugPrint("Error ==> ${error.toString()}");
+      debugPrint("Error ---> ${error.toString()}");
     });
 
     ///For ShowCase
@@ -146,14 +145,14 @@ class _HomePageState extends State<HomePage> {
               ),
               SizedBox(height: MARGIN_MEDIUM),
               BestPopularMoviesAndSerialsSectionView(
-                (movieId) => _navigateToMovieDetailsPage(context,movieId),
+                (movieId) => _navigateToMovieDetailsPage(context, movieId),
                 mNowPlayingMovieList,
               ),
               SizedBox(height: MARGIN_MEDIUM),
               MovieShowtimesSectionView(),
               SizedBox(height: MARGIN_MEDIUM),
               GenreSectionView(
-              (movieId) => _navigateToMovieDetailsPage(context,movieId),
+                (movieId) => _navigateToMovieDetailsPage(context, movieId),
                 mGenreList,
                 mMovieByGenre,
                 onTapGenre: (int) {
@@ -166,7 +165,7 @@ class _HomePageState extends State<HomePage> {
               ActorsAndCreatorsView(
                 BEST_ACTORS_TEXT,
                 MORE_ACTORS_TEXT,
-                mActorList: mActorList,
+                mActorList: this.mActorList,
               ),
               SizedBox(height: MARGIN_MEDIUM),
             ],
@@ -176,7 +175,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<dynamic> _navigateToMovieDetailsPage(BuildContext context, int movieId) {
+  Future<dynamic> _navigateToMovieDetailsPage(
+      BuildContext context, int movieId) {
     return Navigator.push(
       context,
       MaterialPageRoute(

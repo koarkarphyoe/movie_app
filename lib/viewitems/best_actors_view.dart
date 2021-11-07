@@ -1,20 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/data.vos/vos/actor_vo.dart';
+import 'package:movie_app/data.vos/vos/base_vo.dart';
 import 'package:movie_app/network/api_constants.dart';
 import 'package:movie_app/resources/colors.dart';
 import 'package:movie_app/resources/dimens.dart';
 
 class BestActorsView extends StatelessWidget {
-  final ActorVO? mActor;
+  final BaseVO? mActor;
 
   BestActorsView({this.mActor});
 
   @override
   Widget build(BuildContext context) {
-    String imageUrl = mActor?.profilePath != null
-        ? "$actorImageBaseUrl${mActor?.profilePath}"
-        : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxXFMfGm_rjsfmLGWEhfqWg1EAppeIZ4K0eA&usqp=CAU";
+    String imageUrl = mActor!.profilePath != null
+        ? "$actorImageBaseUrl${mActor!.profilePath.toString()}"
+        : "https://w7.pngwing.com/pngs/247/564/png-transparent-computer-icons-user-profile-user-avatar-blue-heroes-electric-blue.png";
+
     return Container(
       margin: EdgeInsets.only(right: MARGIN_MEDIUM),
       width: MOVIE_LIST_ITEM_WIDTH,

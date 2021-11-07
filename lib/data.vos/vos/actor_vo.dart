@@ -1,36 +1,46 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:movie_app/data.vos/movie_vo.dart';
 import 'package:movie_app/data.vos/vos/actor_known_for_vo.dart';
+import 'package:movie_app/data.vos/vos/base_vo.dart';
 part 'actor_vo.g.dart';
 
 @JsonSerializable()
-class ActorVO {
+class ActorVO extends BaseVO{
   @JsonKey(name: "adult")
-  bool? adult;
+  bool adult;
 
   @JsonKey(name: "gender")
-  int? gender;
+  int gender;
 
   @JsonKey(name: "id")
-  int? id;
+  int id;
 
   @JsonKey(name: "known_for")
-  List<ActorKnownForVO>? knownFor;
+  List<ActorKnownForVO> knownFor;
 
   @JsonKey(name: "known_for_department")
-  String? knownForDepartment;
+  String knownForDepartment;
 
-  @JsonKey(name: "name")
-  String? name;
+  // not need after extends from BaseVO
+  // @JsonKey(name: "name")
+  // String? name;
 
   @JsonKey(name: "popularity")
-  double? popularity;
+  double popularity;
 
-  @JsonKey(name: "profile_path")
-  String? profilePath;
+  // not need after extends from BaseVO
+  // @JsonKey(name: "profile_path")
+  // String? profilePath;
 
-  ActorVO(this.adult,this.gender, this.id, this.knownFor, this.knownForDepartment,
-      this.name, this.popularity, this.profilePath);
+  // need to care when fill super properties,no need ''
+  ActorVO(
+      this.adult,
+      this.gender,
+      this.id,
+      this.knownFor,
+      this.knownForDepartment,
+      this.popularity,
+      String? name,
+      String? profilePath) : super(name,profilePath);
 
   factory ActorVO.fromJson(Map<String, dynamic> json) =>
       _$ActorVOFromJson(json);

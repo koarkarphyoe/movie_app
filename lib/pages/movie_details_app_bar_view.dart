@@ -37,12 +37,14 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     super.initState();
 
     /// if you call widget level movieId variable from state object , need to use "widget."
+    /// movieId is passed from home page carry to this page
     mModel.getMovieDetails(widget.movieId).then((value) {
       setState(() {
         mMovie = value;
       });
     });
 
+    ///for actor and creator
     mModel.getCreditsByMovie(widget.movieId).then((value) {
       setState(() {
         mActorLists = value.where((element) => element.isActor()).toList();
@@ -81,7 +83,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                             children: [
                               MovieTimeAndGenreView(mMovie),
                               SizedBox(height: MARGIN_MEDIUM_XLARGE),
-                              StorylineSectionView(),
+                              StorylineSectionView(mMovie),
                               SizedBox(height: MARGIN_MEDIUM_LARGE),
                               PlayTrailerAndRateMovieView(),
                             ],
@@ -90,18 +92,22 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                         ActorsAndCreatorsView(
                           MOVIE_DETAILS_ACTORS,
                           "",
-                          mActorList: [],
+                          mActorList: this.mActorLists,
                           showMoreTextVisility: false,
                         ),
                         Container(
                           padding: EdgeInsets.all(MARGIN_MEDIUM_LARGE),
-                          child: AboutFilmSectionView(),
+                          child: AboutFilmSectionView(mMovie),
                         ),
-                        ActorsAndCreatorsView(
-                          MOVIE_DETAILS_CREATORS,
-                          MOVIE_DETAILS_MORE_CREATORS,
-                          mActorList: [],
-                        ),
+
+                        /// in some movie api, creator name and profilePath not have
+                        mCreatorsLists != null && mCreatorsLists!.isNotEmpty
+                            ? ActorsAndCreatorsView(
+                                MOVIE_DETAILS_CREATORS,
+                                MOVIE_DETAILS_MORE_CREATORS,
+                                mActorList: this.mCreatorsLists,
+                              )
+                            : Container(),
                       ],
                     ),
                   ),
@@ -116,9 +122,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
 }
 
 class AboutFilmSectionView extends StatelessWidget {
-  const AboutFilmSectionView({
-    Key? key,
-  }) : super(key: key);
+  final MovieVO? mMovie;
+  AboutFilmSectionView(this.mMovie);
 
   @override
   Widget build(BuildContext context) {
@@ -127,16 +132,16 @@ class AboutFilmSectionView extends StatelessWidget {
       children: [
         TitleText("ABOUT FILM"),
         SizedBox(height: MARGIN_MEDIUM_2),
-        AboutFilm("Original Title:", "X-men The Origin"),
+        AboutFilm("Original Title:", mMovie!.originalTitle.toString()),
         SizedBox(height: MARGIN_MEDIUM_2),
-        AboutFilm("Type:", "Family,Fantasy,Adventure"),
+        AboutFilm("Type:", mMovie!.genres!.map((e) => e.name).join(",")),
         SizedBox(height: MARGIN_MEDIUM_2),
-        AboutFilm("Production:", "United Kingdom, USA"),
+        AboutFilm("Production:",
+            mMovie!.productionCountries!.map((e) => e.name).join(",")),
         SizedBox(height: MARGIN_MEDIUM_2),
-        AboutFilm("Premiere:", "8 November 2016 (World)"),
+        AboutFilm("Premiere:", mMovie!.releaseDate.toString()),
         SizedBox(height: MARGIN_MEDIUM_2),
-        AboutFilm("Description:",
-            "In modern day Japan, Wolverine is out of his depth in an unknown world as he faces his ultimate nemesis in a life-or-death battle that will leave him forever changed."),
+        AboutFilm("Description:", mMovie!.overview.toString()),
       ],
     );
   }
@@ -247,6 +252,8 @@ class MovieDetailsScreenPlayButtonView extends StatelessWidget {
 }
 
 class StorylineSectionView extends StatelessWidget {
+  final MovieVO? mMovie;
+  StorylineSectionView(this.mMovie);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -256,7 +263,7 @@ class StorylineSectionView extends StatelessWidget {
         TitleText(MOVIE_DETAILS_STORYLINE),
         SizedBox(height: MARGIN_MEDIUM),
         Text(
-          "Logan has been living a desolate life following the death of Jean Grey at his hands. A Japanese girl goes to see him, and tells him that a man he knew in World War II, and saved his life, is now dying and wants to see him. When he sees him, the man offers to make Logan mortal, but Logan refuses. Later, the man dies. At his funeral, some men try to grab the man's granddaughter.",
+          mMovie!.overview.toString(),
           style: TextStyle(color: Colors.white, fontSize: MARGIN_MEDIUM_2),
         )
       ],

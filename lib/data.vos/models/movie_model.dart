@@ -1,4 +1,5 @@
 import 'package:movie_app/data.vos/vos/actor_vo.dart';
+import 'package:movie_app/data.vos/vos/base_vo.dart';
 import 'package:movie_app/data.vos/vos/credit_vo.dart';
 import 'package:movie_app/data.vos/vos/genre_vo.dart';
 
