@@ -1,31 +1,34 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:movie_app/data.vos/vos/actor_known_for_vo.dart';
 import 'package:movie_app/data.vos/vos/base_vo.dart';
+
+import 'movie_vo.dart';
+
+
 part 'actor_vo.g.dart';
 
 @JsonSerializable()
 class ActorVO extends BaseVO{
   @JsonKey(name: "adult")
-  bool adult;
+  bool? adult;
 
   @JsonKey(name: "gender")
-  int gender;
+  int? gender;
 
   @JsonKey(name: "id")
   int id;
 
   @JsonKey(name: "known_for")
-  List<ActorKnownForVO> knownFor;
+  List<MovieVO>? knownFor;
 
   @JsonKey(name: "known_for_department")
-  String knownForDepartment;
+  String? knownForDepartment;
 
   // not need after extends from BaseVO
   // @JsonKey(name: "name")
   // String? name;
 
   @JsonKey(name: "popularity")
-  double popularity;
+  double? popularity;
 
   // not need after extends from BaseVO
   // @JsonKey(name: "profile_path")

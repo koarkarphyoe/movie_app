@@ -6,13 +6,13 @@ part 'production_company_vo.g.dart';
 @JsonSerializable()
 class ProductionCompanyVO {
   @JsonKey(name: "id")
-  int? id;
+  int id;
 
   @JsonKey(name: "logo_path")
   String? logoPath;
 
   @JsonKey(name: "name")
-  String? name;
+  String name;
 
   @JsonKey(name: "origin_country")
   String? originCountry;

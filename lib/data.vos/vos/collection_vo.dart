@@ -10,10 +10,10 @@ class CollectionVO {
   String name;
 
   @JsonKey(name: "poster_path")
-  String posterPath;
+  String? posterPath;
 
   @JsonKey(name: "backdrop_path")
-  String backdropPath;
+  String? backdropPath;
 
   CollectionVO(this.backdropPath, this.id, this.name, this.posterPath);
 

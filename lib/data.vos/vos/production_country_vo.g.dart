@@ -9,7 +9,7 @@ part of 'production_country_vo.dart';
 ProductionCountryVO _$ProductionCountryVOFromJson(Map<String, dynamic> json) =>
     ProductionCountryVO(
       json['iso_3166_1'] as String?,
-      json['name'] as String?,
+      json['name'] as String,
     );
 
 Map<String, dynamic> _$ProductionCountryVOToJson(

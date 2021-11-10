@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:movie_app/data.vos/movie_vo.dart';
+import 'package:movie_app/data.vos/vos/movie_vo.dart';
 import 'package:movie_app/network/api_constants.dart';
 import 'package:movie_app/network/responses/get_actors_response.dart';
 import 'package:movie_app/network/responses/get_credits_by_movie_response.dart';

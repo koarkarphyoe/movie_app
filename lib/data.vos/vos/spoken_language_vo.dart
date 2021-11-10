@@ -10,7 +10,7 @@ class SpokenLanguageVO {
   String? iso6391;
 
   @JsonKey(name: "name")
-  String? name;
+  String name;
 
   SpokenLanguageVO(this.englishName, this.iso6391, this.name);
 

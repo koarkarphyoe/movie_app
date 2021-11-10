@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/data.vos/movie_vo.dart';
+import 'package:movie_app/data.vos/vos/movie_vo.dart';
 import 'package:movie_app/network/api_constants.dart';
 import 'package:movie_app/resources/dimens.dart';
 import 'package:movie_app/widgets/banner_play_button.dart';

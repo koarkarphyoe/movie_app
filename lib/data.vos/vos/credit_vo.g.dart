@@ -7,18 +7,18 @@ part of 'credit_vo.dart';
 // **************************************************************************
 
 CreditVO _$CreditVOFromJson(Map<String, dynamic> json) => CreditVO(
-      json['adult'] as bool,
-      json['gender'] as int,
+      json['adult'] as bool?,
+      json['gender'] as int?,
       json['id'] as int,
-      json['known_for_department'] as String,
-      json['original_name'] as String,
-      (json['popularity'] as num).toDouble(),
+      json['known_for_department'] as String?,
+      json['original_name'] as String?,
+      (json['popularity'] as num?)?.toDouble(),
       json['name'] as String?,
       json['profile_path'] as String?,
-      json['cast_id'] as int,
-      json['character'] as String,
-      json['credit_id'] as String,
-      json['order'] as int,
+      json['cast_id'] as int?,
+      json['character'] as String?,
+      json['credit_id'] as String?,
+      json['order'] as int?,
     );
 
 Map<String, dynamic> _$CreditVOToJson(CreditVO instance) => <String, dynamic>{

@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:movie_app/data.vos/vos/actor_known_for_vo.dart';
 import 'package:movie_app/data.vos/vos/actor_vo.dart';
 
 part 'get_actors_response.g.dart';

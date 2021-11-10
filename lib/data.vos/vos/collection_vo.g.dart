@@ -7,10 +7,10 @@ part of 'collection_vo.dart';
 // **************************************************************************
 
 CollectionVO _$CollectionVOFromJson(Map<String, dynamic> json) => CollectionVO(
-      json['backdrop_path'] as String,
+      json['backdrop_path'] as String?,
       json['id'] as int,
       json['name'] as String,
-      json['poster_path'] as String,
+      json['poster_path'] as String?,
     );
 
 Map<String, dynamic> _$CollectionVOToJson(CollectionVO instance) =>

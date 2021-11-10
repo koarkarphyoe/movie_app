@@ -7,7 +7,7 @@ class ProductionCountryVO {
   String? iso31661;
 
   @JsonKey(name: "name")
-  String? name;
+  String name;
 
   ProductionCountryVO(this.iso31661, this.name);
 

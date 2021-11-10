@@ -3,10 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/data.vos/models/movie_model.dart';
 import 'package:movie_app/data.vos/models/movie_model_impl.dart';
-import 'package:movie_app/data.vos/movie_vo.dart';
 import 'package:movie_app/data.vos/vos/actor_vo.dart';
-import 'package:movie_app/data.vos/vos/base_vo.dart';
 import 'package:movie_app/data.vos/vos/genre_vo.dart';
+import 'package:movie_app/data.vos/vos/movie_vo.dart';
 import 'package:movie_app/resources/colors.dart';
 import 'package:movie_app/resources/dimens.dart';
 import 'package:movie_app/resources/strings.dart';
@@ -48,7 +47,7 @@ class _HomePageState extends State<HomePage> {
     // print(a! + 1);
 
     ///now playing
-    mModel.getNowPlayingMovies(1).then((nowMovie) {
+    mModel.getNowPlayingMovies(1)!.then((nowMovie) {
       setState(() {
         mResults = nowMovie;
       });
@@ -57,7 +56,7 @@ class _HomePageState extends State<HomePage> {
     });
 
     ///BestPopularSection
-    mModel.getPopularMovies(1).then((value) {
+    mModel.getPopularMovies(1)!.then((value) {
       setState(() {
         mNowPlayingMovieList = value;
       });
@@ -66,7 +65,7 @@ class _HomePageState extends State<HomePage> {
     });
 
     ///Actor
-    mModel.getActors(1).then((actor) {
+    mModel.getActors(1)!.then((actor) {
       setState(() {
         mActorList = actor;
       });
@@ -76,7 +75,7 @@ class _HomePageState extends State<HomePage> {
 
     ///For ShowCase
     mModel
-        .getTopRated(1)
+        .getTopRated(1)!
         .then((value) => {
               setState(() {
                 topRated = value;
@@ -88,7 +87,7 @@ class _HomePageState extends State<HomePage> {
 
     ///Genres
     mModel
-        .getGenres()
+        .getGenres()!
         .then((value) => {
               setState(() {
                 mGenreList = value;
@@ -104,7 +103,7 @@ class _HomePageState extends State<HomePage> {
 
   void _getMoviesGenreAndRefresh(int id) {
     mModel
-        .getMovieByGenres(id)
+        .getMovieByGenres(id)!
         .then((value) => {
               setState(() {
                 mMovieByGenre = value;

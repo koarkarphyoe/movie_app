@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:movie_app/data.vos/movie_vo.dart';
+import 'package:movie_app/data.vos/vos/movie_vo.dart';
 part 'get_popular_movies_response.g.dart';
 
 @JsonSerializable()

@@ -7,14 +7,14 @@ part of 'actor_vo.dart';
 // **************************************************************************
 
 ActorVO _$ActorVOFromJson(Map<String, dynamic> json) => ActorVO(
-      json['adult'] as bool,
-      json['gender'] as int,
+      json['adult'] as bool?,
+      json['gender'] as int?,
       json['id'] as int,
-      (json['known_for'] as List<dynamic>)
-          .map((e) => ActorKnownForVO.fromJson(e as Map<String, dynamic>))
+      (json['known_for'] as List<dynamic>?)
+          ?.map((e) => MovieVO.fromJson(e as Map<String, dynamic>))
           .toList(),
-      json['known_for_department'] as String,
-      (json['popularity'] as num).toDouble(),
+      json['known_for_department'] as String?,
+      (json['popularity'] as num?)?.toDouble(),
       json['name'] as String?,
       json['profile_path'] as String?,
     );

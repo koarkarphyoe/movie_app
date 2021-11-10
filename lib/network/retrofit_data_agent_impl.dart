@@ -1,9 +1,9 @@
 // ignore: implementation_imports
 import 'package:dio/src/dio.dart';
-import 'package:movie_app/data.vos/movie_vo.dart';
 import 'package:movie_app/data.vos/vos/actor_vo.dart';
 import 'package:movie_app/data.vos/vos/credit_vo.dart';
 import 'package:movie_app/data.vos/vos/genre_vo.dart';
+import 'package:movie_app/data.vos/vos/movie_vo.dart';
 import 'package:movie_app/network/api_constants.dart';
 import 'package:movie_app/network/retrofit_the_movie_api.dart';
 

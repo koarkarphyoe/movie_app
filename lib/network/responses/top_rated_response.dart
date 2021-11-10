@@ -1,6 +1,6 @@
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:movie_app/data.vos/movie_vo.dart';
+import 'package:movie_app/data.vos/vos/movie_vo.dart';
 part 'top_rated_response.g.dart';
 
 

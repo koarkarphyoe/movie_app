@@ -8,9 +8,9 @@ part of 'production_company_vo.dart';
 
 ProductionCompanyVO _$ProductionCompanyVOFromJson(Map<String, dynamic> json) =>
     ProductionCompanyVO(
-      json['id'] as int?,
+      json['id'] as int,
       json['logo_path'] as String?,
-      json['name'] as String?,
+      json['name'] as String,
       json['origin_country'] as String?,
     );
 

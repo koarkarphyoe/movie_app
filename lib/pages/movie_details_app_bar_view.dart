@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/data.vos/models/movie_model.dart';
 import 'package:movie_app/data.vos/models/movie_model_impl.dart';
-import 'package:movie_app/data.vos/movie_vo.dart';
 import 'package:movie_app/data.vos/vos/actor_vo.dart';
 import 'package:movie_app/data.vos/vos/credit_vo.dart';
+import 'package:movie_app/data.vos/vos/movie_vo.dart';
 import 'package:movie_app/network/api_constants.dart';
 import 'package:movie_app/resources/colors.dart';
 import 'package:movie_app/resources/dimens.dart';
@@ -38,16 +38,16 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
 
     /// if you call widget level movieId variable from state object , need to use "widget."
     /// movieId is passed from home page carry to this page
-    mModel.getMovieDetails(widget.movieId).then((value) {
+    mModel.getMovieDetails(widget.movieId)!.then((value) {
       setState(() {
         mMovie = value;
       });
     });
 
     ///for actor and creator
-    mModel.getCreditsByMovie(widget.movieId).then((value) {
+    mModel.getCreditsByMovie(widget.movieId)!.then((value) {
       setState(() {
-        mActorLists = value.where((element) => element.isActor()).toList();
+        mActorLists = value!.where((element) => element.isActor()).toList();
         mCreatorsLists = value.where((element) => element.isCreator()).toList();
       });
     });
@@ -66,7 +66,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                   SliverAppBar(
                     automaticallyImplyLeading: false,
                     collapsedHeight: SLIVER_APP_BAR_COLLAPSED_HEIGHT,
-                    expandedHeight: MediaQuery.of(context).size.height / 2,
+                    expandedHeight: SLIVER_APP_BAR_EXPANDED_HEIGHT,
                     backgroundColor: PRIMARY_COLOR,
                     flexibleSpace: MovieDetailsScreenSectionView(() {
                       Navigator.pop(context);
@@ -284,6 +284,8 @@ class MovieTimeAndGenreView extends StatelessWidget {
       direction: Axis.horizontal,
       children: _createMovieTimeAndGenreWidget(),
     );
+
+    //cause of overflow , modified again wiht Wrap for chips
     // return Row(
     //   children: [
     //     Icon(Icons.access_time, color: PLAY_BUTTON_COLOR),
@@ -451,7 +453,7 @@ class MovieDetailsYearAndVotesView extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: MARGIN_MEDIUM_XLARGE),
+        SizedBox(height: MARGIN_MEDIUM),
         MovieDetailsTitleTextView(mMovie!.title.toString()),
       ],
     );
