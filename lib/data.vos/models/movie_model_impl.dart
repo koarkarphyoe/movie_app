@@ -16,7 +16,7 @@ class MovieModelImpl extends MovieModel {
   MovieModelImpl._internal();
 
   @override
-  Future<List<MovieVO>?>? getNowPlayingMovies(int page) {
+  Future<List<MovieVO>> getNowPlayingMovies(int page) {
     return mDataAgent.getNowPlayingMovies(page);
   }
 
