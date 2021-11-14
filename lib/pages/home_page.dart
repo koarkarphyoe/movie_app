@@ -46,25 +46,44 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     // print(a! + 1);
 
-    ///now playing
+    //now playing from Network
     mModel.getNowPlayingMovies(1)!.then((nowMovie) {
       setState(() {
-        mResults = nowMovie;
+        mNowPlayingMovieList = nowMovie;
       });
     }).catchError((error) {
       debugPrint("Error => ${error.toString()}");
     });
 
-    ///BestPopularSection
-    mModel.getPopularMovies(1)!.then((value) {
+    //now playing from Database or Persistence Layer
+
+    mModel.getNowPlayingMoviesFromDatabase()!.then((value) {
       setState(() {
         mNowPlayingMovieList = value;
+      });
+    }).catchError((error) {
+      debugPrint("Error is ${error.toString()}");
+    });
+
+    //BestPopular from Network
+    mModel.getPopularMovies(1)!.then((value) {
+      setState(() {
+        mResults = value;
       });
     }).catchError((error) {
       debugPrint(error.toString());
     });
 
-    ///Actor
+    //BestPopular from Database
+    mModel.getPopularMoviesFromDatabase()!.then((value) {
+      setState(() {
+        mResults = value;
+      });
+    }).catchError((error) {
+      debugPrint(error.toString());
+    });
+
+    // Actor from Network
     mModel.getActors(1)!.then((actor) {
       setState(() {
         mActorList = actor;
@@ -73,7 +92,16 @@ class _HomePageState extends State<HomePage> {
       debugPrint("Error ---> ${error.toString()}");
     });
 
-    ///For ShowCase
+    // Actor from DataBase
+    mModel.getActorsFromDatabase()!.then((actor) {
+      setState(() {
+        mActorList = actor;
+      });
+    }).catchError((error) {
+      debugPrint("Error ---> ${error.toString()}");
+    });
+
+    //For ShowCase from network
     mModel
         .getTopRated(1)!
         .then((value) => {
@@ -85,9 +113,36 @@ class _HomePageState extends State<HomePage> {
       debugPrint("Error====>${error.toString()}");
     });
 
-    ///Genres
+    //For ShowCase from database
+    mModel
+        .getTopRatedFromDatabase()!
+        .then((value) => {
+              setState(() {
+                topRated = value;
+              })
+            })
+        .catchError((error) {
+      debugPrint("Error====>${error.toString()}");
+    });
+
+    ///Genres from Network
     mModel
         .getGenres()!
+        .then((value) => {
+              setState(() {
+                mGenreList = value;
+
+                ///Movies by Genres
+                _getMoviesGenreAndRefresh(mGenreList!.first.id);
+              })
+            })
+        .catchError((error) {
+      debugPrint("Error =====> ${error.toString()}");
+    });
+
+    ///Genres from database
+    mModel
+        .getGenresFromDatabase()!
         .then((value) => {
               setState(() {
                 mGenreList = value;

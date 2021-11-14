@@ -10,7 +10,7 @@ import 'package:movie_app/persistence/daos/hive_constants.dart';
 part 'movie_vo.g.dart';
 
 @JsonSerializable()
-@HiveType(typeId: hiveTypeId_MovieVO,adapterName: "MovieVOAdapter")
+@HiveType(typeId: hiveTypeId_MovieVO, adapterName: "MovieVOAdapter")
 class MovieVO {
   @JsonKey(name: "adult")
   @HiveField(0)
@@ -116,6 +116,15 @@ class MovieVO {
   @HiveField(25)
   int? voteCount;
 
+  @HiveField(26)
+  bool? isNowPlaying;
+
+  @HiveField(27)
+  bool? isPopular;
+
+  @HiveField(28)
+  bool? isTopRated;
+
   MovieVO(
       this.adult,
       this.backdropPath,
@@ -142,7 +151,10 @@ class MovieVO {
       this.title,
       this.video,
       this.voteAverage,
-      this.voteCount);
+      this.voteCount,
+      this.isNowPlaying,
+      this.isPopular,
+      this.isTopRated);
   factory MovieVO.fromJson(Map<String, dynamic> json) =>
       _$MovieVOFromJson(json);
 

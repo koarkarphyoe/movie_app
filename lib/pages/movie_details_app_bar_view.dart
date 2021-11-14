@@ -36,9 +36,17 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   void initState() {
     super.initState();
 
+    //form network
     /// if you call widget level movieId variable from state object , need to use "widget."
     /// movieId is passed from home page carry to this page
     mModel.getMovieDetails(widget.movieId)!.then((value) {
+      setState(() {
+        mMovie = value;
+      });
+    });
+
+    //From database
+    mModel.getMovieDetailsFromDatabase(widget.movieId)!.then((value) {
       setState(() {
         mMovie = value;
       });
