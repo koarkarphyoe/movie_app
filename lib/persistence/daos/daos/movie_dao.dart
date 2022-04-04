@@ -34,6 +34,27 @@ class MovieDao {
     return getMovieBox().get(movieId);
   }
 
+  //Reactive Programming
+  Stream<void> getAllMoviesEventStream() {
+    return getMovieBox().watch();
+  }
+
+  Stream<List<MovieVO>> getNowPlayingMoviesStream() {
+    return Stream.value(getAllMovie()
+        .where((element) => element.isNowPlaying ?? false)
+        .toList());
+  }
+
+  Stream<List<MovieVO>> getPopularMoviesStream() {
+    return Stream.value(
+        getAllMovie().where((element) => element.isPopular ?? false).toList());
+  }
+
+  Stream<List<MovieVO>> getTopRatedMoviesStream() {
+    return Stream.value(
+        getAllMovie().where((element) => element.isTopRated ?? false).toList());
+  }
+
   Box<MovieVO> getMovieBox() {
     return Hive.box<MovieVO>(boxName_MovieVO);
   }

@@ -37,6 +37,7 @@ dependencies:
   retrofit: ^2.0.1
   hive: ^2.0.4
   hive_flutter: ^1.1.0
+  stream_transform: ^2.0.0
 
 
 dev_dependencies:

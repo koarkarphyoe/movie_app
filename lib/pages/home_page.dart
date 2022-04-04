@@ -1,5 +1,4 @@
 import 'package:dots_indicator/dots_indicator.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/data.vos/models/movie_model.dart';
 import 'package:movie_app/data.vos/models/movie_model_impl.dart';
@@ -47,13 +46,13 @@ class _HomePageState extends State<HomePage> {
     // print(a! + 1);
 
     //now playing from Network
-    mModel.getNowPlayingMovies(1)!.then((nowMovie) {
-      setState(() {
-        mNowPlayingMovieList = nowMovie;
-      });
-    }).catchError((error) {
-      debugPrint("Error => ${error.toString()}");
-    });
+    // mModel.getNowPlayingMovies(1)!.then((nowMovie) {
+    //   setState(() {
+    //     mNowPlayingMovieList = nowMovie;
+    //   });
+    // }).catchError((error) {
+    //   debugPrint("Error => ${error.toString()}");
+    // });
 
     //now playing from Database or Persistence Layer
 
@@ -66,13 +65,13 @@ class _HomePageState extends State<HomePage> {
     });
 
     //BestPopular from Network
-    mModel.getPopularMovies(1)!.then((value) {
-      setState(() {
-        mResults = value;
-      });
-    }).catchError((error) {
-      debugPrint(error.toString());
-    });
+    // mModel.getPopularMovies(1)!.then((value) {
+    //   setState(() {
+    //     mResults = value;
+    //   });
+    // }).catchError((error) {
+    //   debugPrint(error.toString());
+    // });
 
     //BestPopular from Database
     mModel.getPopularMoviesFromDatabase()!.then((value) {
@@ -102,16 +101,16 @@ class _HomePageState extends State<HomePage> {
     });
 
     //For ShowCase from network
-    mModel
-        .getTopRated(1)!
-        .then((value) => {
-              setState(() {
-                topRated = value;
-              })
-            })
-        .catchError((error) {
-      debugPrint("Error====>${error.toString()}");
-    });
+    // mModel
+    //     .getTopRated(1)!
+    //     .then((value) => {
+    //           setState(() {
+    //             topRated = value;
+    //           })
+    //         })
+    //     .catchError((error) {
+    //   debugPrint("Error====>${error.toString()}");
+    // });
 
     //For ShowCase from database
     mModel

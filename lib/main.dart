@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:movie_app/data.vos/vos/actor_vo.dart';
 import 'package:movie_app/data.vos/vos/base_vo.dart';
@@ -17,7 +16,6 @@ import 'data.vos/vos/production_country_vo.dart';
 
 void main() async {
   await Hive.initFlutter();
-
   Hive.registerAdapter(ActorVOAdapter());
   Hive.registerAdapter(BaseVOAdapter());
   Hive.registerAdapter(CollectionVOAdapter());

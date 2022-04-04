@@ -8,6 +8,7 @@ import 'package:movie_app/network/retrofit_data_agent_impl.dart';
 import 'package:movie_app/persistence/daos/daos/actor_dao.dart';
 import 'package:movie_app/persistence/daos/daos/genre_dao.dart';
 import 'package:movie_app/persistence/daos/daos/movie_dao.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 class MovieModelImpl extends MovieModel {
   MovieDataAgent mDataAgent = RetrofitDataAgentImpl();
@@ -33,8 +34,8 @@ class MovieModelImpl extends MovieModel {
 
   // After integration Persistence Layers
   @override
-  Future<List<MovieVO>> getNowPlayingMovies(int page) {
-    return mDataAgent.getNowPlayingMovies(page).then((movies) async {
+  void getNowPlayingMovies(int page) {
+     mDataAgent.getNowPlayingMovies(page).then((movies) async {
       // e is MovieVO element
       List<MovieVO> nowPlayingMovies = movies.map((e) {
         e.isNowPlaying = true;
@@ -47,19 +48,34 @@ class MovieModelImpl extends MovieModel {
     });
   }
 
+  //Before Reactive Programming Implementation
+  // @override
+  // Future<List<MovieVO>> getPopularMovies(int page) {
+  //   return mDataAgent.getPopularMovies(page).then((value) async {
+  //     List<MovieVO> popularMovies = value.map((e) {
+  //       e.isNowPlaying = false;
+  //       e.isPopular = true;
+  //       e.isTopRated = false;
+  //       return e;
+  //     }).toList();
+
+  //     mMovieDao.saveAllMovie(popularMovies);
+
+  //     return Future.value(value);
+  //   });
+  // }
+
+  //After Reactive Programming Implementation
   @override
-  Future<List<MovieVO>> getPopularMovies(int page) {
-    return mDataAgent.getPopularMovies(page).then((value) async {
+  void getPopularMovies(int page) {
+    mDataAgent.getPopularMovies(page).then((value) async {
       List<MovieVO> popularMovies = value.map((e) {
         e.isNowPlaying = false;
         e.isPopular = true;
         e.isTopRated = false;
         return e;
       }).toList();
-
       mMovieDao.saveAllMovie(popularMovies);
-
-      return Future.value(value);
     });
   }
 
@@ -73,8 +89,8 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  Future<List<MovieVO>> getTopRated(int page) {
-    return mDataAgent.getTopRated(page).then((value) async {
+  void getTopRated(int page) {
+    mDataAgent.getTopRated(page).then((value) async {
       List<MovieVO> mTopRated = value.map((e) {
         e.isNowPlaying = false;
         e.isPopular = false;
@@ -82,8 +98,6 @@ class MovieModelImpl extends MovieModel {
         return e;
       }).toList();
       mMovieDao.saveAllMovie(mTopRated);
-
-      return Future.value(value);
     });
   }
 
@@ -114,7 +128,7 @@ class MovieModelImpl extends MovieModel {
     });
   }
 
-  // Database Section or Persistence Layer (whith Hive)
+  // Database Section or Persistence Layer (whith Hive) and Reactive Programming
 
   @override
   Future<List<ActorVO>?>? getActorsFromDatabase() {
@@ -133,25 +147,37 @@ class MovieModelImpl extends MovieModel {
 
   @override
   Future<List<MovieVO>?>? getNowPlayingMoviesFromDatabase() {
-    return Future.value(mMovieDao
-        .getAllMovie()
-        .where((element) => element.isNowPlaying ?? true)
-        .toList());
+    this.getNowPlayingMovies(1);
+    return mMovieDao
+        .getAllMoviesEventStream()
+        .startWith(mMovieDao.getNowPlayingMoviesStream())
+        .combineLatest(mMovieDao.getNowPlayingMoviesStream(),
+            (p0, p1) => p1 as List<MovieVO>)
+        .first;
   }
 
   @override
   Future<List<MovieVO>?>? getPopularMoviesFromDatabase() {
-    return Future.value(mMovieDao
-        .getAllMovie()
-        .where((element) => element.isPopular ?? true)
-        .toList());
+    this.getPopularMovies(1);
+    return mMovieDao
+        .getAllMoviesEventStream()
+        //will start from the database's data in UI
+        .startWith(mMovieDao.getPopularMoviesStream())
+        .combineLatest(
+            mMovieDao.getPopularMoviesStream(),
+            //p0 means getAllMoviesEventStream(),p1 means getPopularMoviesStream()
+            (event, movieList) => movieList as List<MovieVO>)
+        .first;
   }
 
   @override
   Future<List<MovieVO>?>? getTopRatedFromDatabase() {
-    return Future.value(mMovieDao
-        .getAllMovie()
-        .where((element) => element.isTopRated ?? true)
-        .toList());
+    this.getTopRated(1);
+    return mMovieDao
+        .getAllMoviesEventStream()
+        .startWith(mMovieDao.getTopRatedMoviesStream())
+        .combineLatest(mMovieDao.getTopRatedMoviesStream(),
+            (event, movieList) => movieList as List<MovieVO>)
+        .first;
   }
 }
