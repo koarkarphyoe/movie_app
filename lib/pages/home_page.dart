@@ -157,7 +157,7 @@ class _HomePageState extends State<HomePage> {
 
   void _getMoviesGenreAndRefresh(int id) {
     mModel
-        .getMovieByGenres(id)!
+        .getMovieByGenre(id)!
         .then((value) => {
               setState(() {
                 mMovieByGenre = value;

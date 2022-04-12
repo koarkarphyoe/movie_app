@@ -105,13 +105,12 @@ class MovieModelImpl extends MovieModel {
   Future<List<GenreVO>> getGenres() {
     return mDataAgent.getGenres().then((value) async {
       mGenreDao.saveAllGenre(value);
-
       return Future.value(value);
     });
   }
 
   @override
-  Future<List<MovieVO>> getMovieByGenres(int genreId) {
+  Future<List<MovieVO>> getMovieByGenre(int genreId) {
     return mDataAgent.getMovieByGenres(genreId);
   }
 
