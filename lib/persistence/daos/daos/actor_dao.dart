@@ -12,7 +12,6 @@ class ActorDao {
   ActorDao._internal();
 
   //save all actors from network to hiveBox
-
   void saveAllActors(List<ActorVO> actorList) async {
     Map<int, ActorVO> actorMap = Map.fromIterable(actorList,
         key: (actors) => actors.id, value: (actors) => actors);
@@ -21,13 +20,20 @@ class ActorDao {
   }
 
   // take all actors from hiveBox
-
   List<ActorVO> getAllActors() {
     return getActorBox().values.toList();
   }
 
-  //take hiveBox name
+  ///Reactive programming
+  Stream<void> getAllActorsEventStream() {
+    return getActorBox().watch();
+  }
 
+  Stream<List<ActorVO>> getAllActorsListStream() {
+    return Stream.value(getAllActors().toList());
+  }
+
+  //take hiveBox name
   Box<ActorVO> getActorBox() {
     return Hive.box<ActorVO>(boxName_ActorVO);
   }

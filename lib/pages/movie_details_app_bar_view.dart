@@ -140,16 +140,26 @@ class AboutFilmSectionView extends StatelessWidget {
       children: [
         TitleText("ABOUT FILM"),
         SizedBox(height: MARGIN_MEDIUM_2),
-        AboutFilm("Original Title:", mMovie!.originalTitle.toString()),
+        mMovie?.originalTitle != null
+            ? AboutFilm("Original Title:", mMovie!.originalTitle.toString())
+            : CircularProgressIndicator(),
         SizedBox(height: MARGIN_MEDIUM_2),
-        AboutFilm("Type:", mMovie!.genres!.map((e) => e.name).join(",")),
+        mMovie?.genres != null
+            ? AboutFilm("Type:", mMovie!.genres!.map((e) => e.name).join(","))
+            : CircularProgressIndicator(),
         SizedBox(height: MARGIN_MEDIUM_2),
-        AboutFilm("Production:",
-            mMovie!.productionCountries!.map((e) => e.name).join(",")),
+        mMovie?.productionCountries != null
+            ? AboutFilm("Production:",
+                mMovie!.productionCountries!.map((e) => e.name).join(","))
+            : CircularProgressIndicator(),
         SizedBox(height: MARGIN_MEDIUM_2),
-        AboutFilm("Premiere:", mMovie!.releaseDate.toString()),
+        mMovie?.releaseDate != null
+            ? AboutFilm("Premiere:", mMovie!.releaseDate.toString())
+            : CircularProgressIndicator(),
         SizedBox(height: MARGIN_MEDIUM_2),
-        AboutFilm("Description:", mMovie!.overview.toString()),
+        mMovie?.overview != null
+            ? AboutFilm("Description:", mMovie!.overview.toString())
+            : CircularProgressIndicator(),
       ],
     );
   }
@@ -337,7 +347,12 @@ class MovieTimeAndGenreView extends StatelessWidget {
       ),
       SizedBox(width: MARGIN_MEDIUM),
     ];
-    widgets.addAll(mMovie!.genres!.map((e) => GenreChipView(e.name)).toList());
+    if (mMovie?.genres != null) {
+      widgets
+          .addAll(mMovie!.genres!.map((e) => GenreChipView(e.name)).toList());
+    } else {
+      widgets.addAll([]);
+    }
     widgets.add(
       Icon(
         Icons.favorite_border,

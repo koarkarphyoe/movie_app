@@ -83,13 +83,13 @@ class _HomePageState extends State<HomePage> {
     });
 
     // Actor from Network
-    mModel.getActors(1)!.then((actor) {
-      setState(() {
-        mActorList = actor;
-      });
-    }).catchError((error) {
-      debugPrint("Error ---> ${error.toString()}");
-    });
+    // mModel.getActors(1)!.then((actor) {
+    //   setState(() {
+    //     mActorList = actor;
+    //   });
+    // }).catchError((error) {
+    //   debugPrint("Error ---> ${error.toString()}");
+    // });
 
     // Actor from DataBase
     mModel.getActorsFromDatabase()!.then((actor) {
@@ -125,19 +125,19 @@ class _HomePageState extends State<HomePage> {
     });
 
     ///Genres from Network
-    mModel
-        .getGenres()!
-        .then((value) => {
-              setState(() {
-                mGenreList = value;
+    // mModel
+    //     .getGenres()!
+    //     .then((value) => {
+    //           setState(() {
+    //             mGenreList = value;
 
-                ///Movies by Genres
-                _getMoviesGenreAndRefresh(mGenreList!.first.id);
-              })
-            })
-        .catchError((error) {
-      debugPrint("Error =====> ${error.toString()}");
-    });
+    //             ///Movies by Genres
+    //             _getMoviesGenreAndRefresh(mGenreList!.first.id);
+    //           })
+    //         })
+    //     .catchError((error) {
+    //   debugPrint("Error =====> ${error.toString()}");
+    // });
 
     ///Genres from database
     mModel
@@ -145,7 +145,6 @@ class _HomePageState extends State<HomePage> {
         .then((value) => {
               setState(() {
                 mGenreList = value;
-
                 ///Movies by Genres
                 _getMoviesGenreAndRefresh(mGenreList!.first.id);
               })
@@ -193,8 +192,9 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              ///Need to care banner count! => mResults?.take(8).toList()
               BannerSectionView(
-                mResults: mResults,
+                mResults: mResults?.take(8).toList(),
               ),
               SizedBox(height: MARGIN_MEDIUM),
               BestPopularMoviesAndSerialsSectionView(

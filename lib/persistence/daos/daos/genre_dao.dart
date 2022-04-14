@@ -21,6 +21,15 @@ class GenreDao {
     return getGenreBox().values.toList();
   }
 
+  ///Reactive Programming
+  Stream<void> getAllGenreEventStrem() {
+    return getGenreBox().watch();
+  }
+
+  Stream<List<GenreVO>> getAllGenreListStream() {
+    return Stream.value(getAllGenre().toList());
+  }
+
   Box<GenreVO> getGenreBox() {
     return Hive.box<GenreVO>(boxName_GenreVO);
   }

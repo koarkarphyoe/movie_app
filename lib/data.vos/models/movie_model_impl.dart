@@ -35,7 +35,7 @@ class MovieModelImpl extends MovieModel {
   // After integration Persistence Layers
   @override
   void getNowPlayingMovies(int page) {
-     mDataAgent.getNowPlayingMovies(page).then((movies) async {
+    mDataAgent.getNowPlayingMovies(page).then((movies) async {
       // e is MovieVO element
       List<MovieVO> nowPlayingMovies = movies.map((e) {
         e.isNowPlaying = true;
@@ -80,11 +80,9 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  Future<List<ActorVO>> getActors(int page) {
-    return mDataAgent.getActors(page).then((value) async {
+  void getActors(int page) {
+    mDataAgent.getActors(page).then((value) async {
       mActorDao.saveAllActors(value);
-
-      return Future.value(value);
     });
   }
 
@@ -102,10 +100,9 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  Future<List<GenreVO>> getGenres() {
-    return mDataAgent.getGenres().then((value) async {
+  void getGenres() {
+    mDataAgent.getGenres().then((value) async {
       mGenreDao.saveAllGenre(value);
-      return Future.value(value);
     });
   }
 
@@ -131,12 +128,23 @@ class MovieModelImpl extends MovieModel {
 
   @override
   Future<List<ActorVO>?>? getActorsFromDatabase() {
-    return Future.value(mActorDao.getAllActors());
+    this.getActors(1);
+    return mActorDao
+        .getAllActorsEventStream()
+        .combineLatest(
+            mActorDao.getAllActorsListStream(), (p0, p1) => p1 as List<ActorVO>)
+        .first;
   }
 
   @override
   Future<List<GenreVO>?>? getGenresFromDatabase() {
-    return Future.value(mGenreDao.getAllGenre());
+    this.getGenres();
+    return mGenreDao
+        .getAllGenreEventStrem()
+        .startWith(mGenreDao.getAllGenreListStream())
+        .combineLatest(
+            mGenreDao.getAllGenreListStream(), (p0, p1) => p1 as List<GenreVO>)
+        .first;
   }
 
   @override
