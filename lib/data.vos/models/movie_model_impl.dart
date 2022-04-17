@@ -6,6 +6,7 @@ import 'package:movie_app/data.vos/vos/movie_vo.dart';
 import 'package:movie_app/network/movie_data_agent.dart';
 import 'package:movie_app/network/retrofit_data_agent_impl.dart';
 import 'package:movie_app/persistence/daos/daos/actor_dao.dart';
+import 'package:movie_app/persistence/daos/daos/credits_dao.dart';
 import 'package:movie_app/persistence/daos/daos/genre_dao.dart';
 import 'package:movie_app/persistence/daos/daos/movie_dao.dart';
 import 'package:stream_transform/stream_transform.dart';
@@ -23,6 +24,7 @@ class MovieModelImpl extends MovieModel {
   MovieDao mMovieDao = MovieDao();
   ActorDao mActorDao = ActorDao();
   GenreDao mGenreDao = GenreDao();
+  CreditsDao mCreditDao = CreditsDao();
 
   // Network Section
 
@@ -112,15 +114,17 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  Future<List<CreditVO>> getCreditsByMovie(int movieId) {
-    return mDataAgent.getCreditsByMovie(movieId);
+  void getCreditsByMovie(int movieId) {
+    mDataAgent.getCreditsByMovie(movieId).then((value) async {
+      mCreditDao.saveAllCredits(value);
+    });
   }
 
   @override
-  Future<MovieVO> getMovieDetails(int movieId) {
-    return mDataAgent.getMovieDetails(movieId).then((value) async {
+  void getMovieDetails(int movieId) {
+    mDataAgent.getMovieDetails(movieId).then((value) async {
       mMovieDao.saveSingleMovie(value);
-      return Future.value(value);
+      // return Future.value(value);
     });
   }
 
@@ -149,7 +153,13 @@ class MovieModelImpl extends MovieModel {
 
   @override
   Future<MovieVO>? getMovieDetailsFromDatabase(int movieId) {
-    return Future.value(mMovieDao.getMovieById(movieId));
+    this.getMovieDetails(movieId);
+    return mMovieDao
+        .getAllMoviesEventStream()
+        .startWith(mMovieDao.getMovieDetailsStream(movieId))
+        .combineLatest(
+            mMovieDao.getMovieDetailsStream(movieId), (p0, p1) => p1 as MovieVO)
+        .first;
   }
 
   @override
@@ -185,6 +195,16 @@ class MovieModelImpl extends MovieModel {
         .startWith(mMovieDao.getTopRatedMoviesStream())
         .combineLatest(mMovieDao.getTopRatedMoviesStream(),
             (event, movieList) => movieList as List<MovieVO>)
+        .first;
+  }
+
+  @override
+  Future<List<CreditVO>?>? getCreditsFromDatabase(int movieId) {
+    this.getCreditsByMovie(movieId);
+    return mCreditDao
+        .getAllCreditsEventStream()
+        .combineLatest(mCreditDao.getAllCreditsListStream(),
+            (p0, p1) => p1 as List<CreditVO>)
         .first;
   }
 }

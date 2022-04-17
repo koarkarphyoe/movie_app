@@ -16,16 +16,13 @@ import 'package:movie_app/widgets/title_text.dart';
 class MovieDetailsPage extends StatefulWidget {
   final int movieId;
   MovieDetailsPage(this.movieId);
-
   @override
   State<MovieDetailsPage> createState() => _MovieDetailsPageState();
 }
 
 class _MovieDetailsPageState extends State<MovieDetailsPage> {
-  late final List<ActorVO> mActorList;
 
   MovieModel mModel = MovieModelImpl();
-
   MovieVO? mMovie;
 
   /// data bind from one endPoint and store to two variable for actor and creator ("known_for_department")
@@ -39,11 +36,11 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     //form network
     /// if you call widget level movieId variable from state object , need to use "widget."
     /// movieId is passed from home page carry to this page
-    mModel.getMovieDetails(widget.movieId)!.then((value) {
-      setState(() {
-        mMovie = value;
-      });
-    });
+    // mModel.getMovieDetails(widget.movieId)!.then((value) {
+    //   setState(() {
+    //     mMovie = value;
+    //   });
+    // });
 
     //From database
     mModel.getMovieDetailsFromDatabase(widget.movieId)!.then((value) {
@@ -53,7 +50,14 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     });
 
     ///for actor and creator
-    mModel.getCreditsByMovie(widget.movieId)!.then((value) {
+    // mModel.getCreditsByMovie(widget.movieId)!.then((value) {
+    //   setState(() {
+    //     mActorLists = value!.where((element) => element.isActor()).toList();
+    //     mCreatorsLists = value.where((element) => element.isCreator()).toList();
+    //   });
+    // });
+
+    mModel.getCreditsFromDatabase(widget.movieId)?.then((value) {
       setState(() {
         mActorLists = value!.where((element) => element.isActor()).toList();
         mCreatorsLists = value.where((element) => element.isCreator()).toList();
@@ -146,12 +150,12 @@ class AboutFilmSectionView extends StatelessWidget {
         SizedBox(height: MARGIN_MEDIUM_2),
         mMovie?.genres != null
             ? AboutFilm("Type:", mMovie!.genres!.map((e) => e.name).join(","))
-            : CircularProgressIndicator(),
+            : Container(),
         SizedBox(height: MARGIN_MEDIUM_2),
         mMovie?.productionCountries != null
             ? AboutFilm("Production:",
                 mMovie!.productionCountries!.map((e) => e.name).join(","))
-            : CircularProgressIndicator(),
+            : Container(),
         SizedBox(height: MARGIN_MEDIUM_2),
         mMovie?.releaseDate != null
             ? AboutFilm("Premiere:", mMovie!.releaseDate.toString())

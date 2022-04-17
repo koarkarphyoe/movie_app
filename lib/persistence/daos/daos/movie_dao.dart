@@ -55,6 +55,10 @@ class MovieDao {
         getAllMovie().where((element) => element.isTopRated ?? false).toList());
   }
 
+  Stream<MovieVO> getMovieDetailsStream(int movieId) {
+    return Stream.value(getMovieById(movieId)!);
+  }
+
   Box<MovieVO> getMovieBox() {
     return Hive.box<MovieVO>(boxName_MovieVO);
   }

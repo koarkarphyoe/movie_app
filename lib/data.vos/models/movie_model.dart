@@ -8,14 +8,15 @@ abstract class MovieModel {
   // Future<List<MovieVO>?>? getNowPlayingMovies(int page); //Before Reactive Programming Implementation
   // Future<List<MovieVO>?>? getPopularMovies(int page); //Before Reactive Programming Implementation
   // Future<List<MovieVO>?>? getTopRated(int page); //Before Reactive Programming Implementation
-  void getNowPlayingMovies(int page); //After Reactive Programming Implementation
+  void getNowPlayingMovies(
+      int page); //After Reactive Programming Implementation
   void getPopularMovies(int page); //After Reactive Programming Implementation
-  void getTopRated(int page);//After Reactive Programming Implementation
+  void getTopRated(int page); //After Reactive Programming Implementation
   void getActors(int page);
   Future<List<MovieVO>?>? getMovieByGenre(int genreId);
   void getGenres();
-  Future<List<CreditVO>?>? getCreditsByMovie(int movieId);
-  Future<MovieVO>? getMovieDetails(int movieId);
+  void getCreditsByMovie(int movieId);
+  void getMovieDetails(int movieId);
 
   //Database
 
@@ -24,5 +25,6 @@ abstract class MovieModel {
   Future<List<ActorVO>?>? getActorsFromDatabase();
   Future<List<MovieVO>?>? getTopRatedFromDatabase();
   Future<List<GenreVO>?>? getGenresFromDatabase();
+  Future<List<CreditVO>?>? getCreditsFromDatabase(int movieId);
   Future<MovieVO>? getMovieDetailsFromDatabase(int movieId);
 }

@@ -15,6 +15,7 @@ import 'data.vos/vos/production_company_vo.dart';
 import 'data.vos/vos/production_country_vo.dart';
 
 void main() async {
+  
   await Hive.initFlutter();
   Hive.registerAdapter(ActorVOAdapter());
   Hive.registerAdapter(BaseVOAdapter());
@@ -30,6 +31,7 @@ void main() async {
   await Hive.openBox<ActorVO>(boxName_ActorVO);
   await Hive.openBox<MovieVO>(boxName_MovieVO);
   await Hive.openBox<GenreVO>(boxName_GenreVO);
+  await Hive.openBox<CreditVO>(boxName_CreditVO);
   // to check network data
   // MovieModelImpl()
   //     .getNowPlayingMovies(1)
