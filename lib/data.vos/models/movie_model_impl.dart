@@ -46,7 +46,7 @@ class MovieModelImpl extends MovieModel {
         return e;
       }).toList();
       mMovieDao.saveAllMovie(nowPlayingMovies);
-      return Future.value(movies);
+      // return Future.value(movies);
     });
   }
 

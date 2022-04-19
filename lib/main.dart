@@ -15,7 +15,6 @@ import 'data.vos/vos/production_company_vo.dart';
 import 'data.vos/vos/production_country_vo.dart';
 
 void main() async {
-  
   await Hive.initFlutter();
   Hive.registerAdapter(ActorVOAdapter());
   Hive.registerAdapter(BaseVOAdapter());
