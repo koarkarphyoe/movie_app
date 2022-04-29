@@ -42,7 +42,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     // });
 
     //From database
-    mModel.getMovieDetailsFromDatabase(widget.movieId)!.then((value) {
+    mModel.getMovieDetailsFromDatabase(widget.movieId)?.listen((value) {
       setState(() {
         mMovie = value;
       });
@@ -56,7 +56,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     //   });
     // });
 
-    mModel.getCreditsFromDatabase(widget.movieId)?.then((value) {
+    mModel.getCreditsFromDatabase(widget.movieId)?.listen((value) {
       setState(() {
         mActorLists = value!.where((element) => element.isActor()).toList();
         mCreatorsLists = value.where((element) => element.isCreator()).toList();

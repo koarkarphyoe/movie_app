@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:movie_app/data.vos/vos/credit_vo.dart';
 import 'package:movie_app/persistence/daos/hive_constants.dart';
+import 'package:rxdart/rxdart.dart';
 
 class CreditsDao {
   static final CreditsDao _singleton = CreditsDao._internal();
@@ -25,7 +26,10 @@ class CreditsDao {
   }
 
   Stream<List<CreditVO>> getAllCreditsListStream() {
-    return Stream.value(getAllCredits().toList());
+    return getCreditsBox()
+        .watch()
+        .map((event) => getAllCredits())
+        .startWith(getAllCredits());
   }
 
   Box<CreditVO> getCreditsBox() {

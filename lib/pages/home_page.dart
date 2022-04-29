@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
   ///nullable type
   List<MovieVO>? mNowPlayingMovieList;
   List<ActorVO>? mActorList;
-  List<MovieVO>? mResults;
+  List<MovieVO>? mPopularMovieList;
   List<MovieVO>? topRated;
 
   ///for Genres title and movie list
@@ -54,13 +54,13 @@ class _HomePageState extends State<HomePage> {
     //   debugPrint("Error => ${error.toString()}");
     // });
 
-    //now playing from Database or Persistence Layer
+    //now playing from Database 
 
-    mModel.getNowPlayingMoviesFromDatabase()!.then((value) {
+    mModel.getNowPlayingMoviesFromDatabase()!.listen((value) {
       setState(() {
         mNowPlayingMovieList = value;
       });
-    }).catchError((error) {
+    }).onError((error) {
       debugPrint("Error is ${error.toString()}");
     });
 
@@ -74,11 +74,11 @@ class _HomePageState extends State<HomePage> {
     // });
 
     //BestPopular from Database
-    mModel.getPopularMoviesFromDatabase()!.then((value) {
+    mModel.getPopularMoviesFromDatabase()!.listen((value) {
       setState(() {
-        mResults = value;
+        mPopularMovieList = value;
       });
-    }).catchError((error) {
+    }).onError((error) {
       debugPrint(error.toString());
     });
 
@@ -92,11 +92,11 @@ class _HomePageState extends State<HomePage> {
     // });
 
     // Actor from DataBase
-    mModel.getActorsFromDatabase()!.then((actor) {
+    mModel.getActorsFromDatabase()!.listen((actor) {
       setState(() {
         mActorList = actor;
       });
-    }).catchError((error) {
+    }).onError((error) {
       debugPrint("Error ---> ${error.toString()}");
     });
 
@@ -115,12 +115,12 @@ class _HomePageState extends State<HomePage> {
     //For ShowCase from database
     mModel
         .getTopRatedFromDatabase()!
-        .then((value) => {
+        .listen((value) => {
               setState(() {
                 topRated = value;
               })
             })
-        .catchError((error) {
+        .onError((error) {
       debugPrint("Error====>${error.toString()}");
     });
 
@@ -142,21 +142,21 @@ class _HomePageState extends State<HomePage> {
     ///Genres from database
     mModel
         .getGenresFromDatabase()!
-        .then((value) => {
+        .listen((value) => {
               setState(() {
                 mGenreList = value;
                 ///Movies by Genres
                 _getMoviesGenreAndRefresh(mGenreList!.first.id);
               })
             })
-        .catchError((error) {
-      debugPrint("Error =====> ${error.toString()}");
+        .onError((error) {
+      debugPrint("getGenresFromDatabase Error is -> ${error.toString()}");
     });
   }
 
   void _getMoviesGenreAndRefresh(int id) {
     mModel
-        .getMovieByGenre(id)!
+        .getMovieByGenre(id)
         .then((value) => {
               setState(() {
                 mMovieByGenre = value;
@@ -194,7 +194,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               ///Need to care banner count! => mResults?.take(8).toList()
               BannerSectionView(
-                mResults: mResults?.take(8).toList(),
+                mPopularMovieList: mPopularMovieList?.take(8).toList(),
               ),
               SizedBox(height: MARGIN_MEDIUM),
               BestPopularMoviesAndSerialsSectionView(
@@ -420,8 +420,8 @@ class HorizontalMovieListView extends StatelessWidget {
 }
 
 class BannerSectionView extends StatefulWidget {
-  final List<MovieVO>? mResults;
-  BannerSectionView({this.mResults});
+  final List<MovieVO>? mPopularMovieList;
+  BannerSectionView({this.mPopularMovieList});
 
   @override
   State<BannerSectionView> createState() => _BannerSectionViewState();
@@ -442,13 +442,13 @@ class _BannerSectionViewState extends State<BannerSectionView> {
               });
             },
             children:
-                widget.mResults?.map((movie) => BannerView(movie)).toList() ??
+                widget.mPopularMovieList?.map((movie) => BannerView(movie)).toList() ??
                     [],
           ),
         ),
         SizedBox(height: MARGIN_MEDIUM),
         DotsIndicator(
-          dotsCount: widget.mResults?.length ?? 1,
+          dotsCount: 8,
           position: _position,
           mainAxisSize: MainAxisSize.max,
           decorator: DotsDecorator(

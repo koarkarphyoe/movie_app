@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:movie_app/data.vos/vos/genre_vo.dart';
 import 'package:movie_app/persistence/daos/hive_constants.dart';
+import 'package:rxdart/rxdart.dart';
 
 class GenreDao {
   static final GenreDao _singleton = GenreDao._internal();
@@ -26,8 +27,14 @@ class GenreDao {
     return getGenreBox().watch();
   }
 
+  // Stream<List<GenreVO>> getAllGenreListStream() {
+  //   return Stream.value(getAllGenre().toList());
+  // }
   Stream<List<GenreVO>> getAllGenreListStream() {
-    return Stream.value(getAllGenre().toList());
+    return getGenreBox()
+        .watch()
+        .map((event) => getAllGenre())
+        .startWith(getAllGenre());
   }
 
   Box<GenreVO> getGenreBox() {

@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:hive/hive.dart';
 import 'package:movie_app/data.vos/vos/movie_vo.dart';
 import 'package:movie_app/persistence/daos/hive_constants.dart';
+import 'package:rxdart/rxdart.dart';
 
 class MovieDao {
   static final MovieDao _singleton = MovieDao._internal();
@@ -40,24 +43,45 @@ class MovieDao {
   }
 
   Stream<List<MovieVO>> getNowPlayingMoviesStream() {
-    return Stream.value(getAllMovie()
-        .where((element) => element.isNowPlaying ?? false)
-        .toList());
+    return getMovieBox()
+        .watch()
+        .map((event) => getAllMovie()
+            .where((element) => element.isNowPlaying ?? false)
+            .toList())
+        .startWith(getAllMovie()
+            .where((element) => element.isNowPlaying ?? false)
+            .toList());
   }
 
   Stream<List<MovieVO>> getPopularMoviesStream() {
-    return Stream.value(
-        getAllMovie().where((element) => element.isPopular ?? false).toList());
+    return getMovieBox()
+        .watch()
+        .map((event) => getAllMovie()
+            .where((element) => element.isPopular ?? false)
+            .toList())
+        .startWith(getAllMovie()
+            .where((element) => element.isPopular ?? false)
+            .toList());
   }
 
   Stream<List<MovieVO>> getTopRatedMoviesStream() {
-    return Stream.value(
-        getAllMovie().where((element) => element.isTopRated ?? false).toList());
+    return getMovieBox()
+        .watch()
+        .map((event) => getAllMovie()
+            .where((element) => element.isTopRated ?? false)
+            .toList())
+        .startWith(getAllMovie()
+            .where((element) => element.isTopRated ?? false)
+            .toList());
   }
 
   Stream<MovieVO> getMovieDetailsStream(int movieId) {
     return Stream.value(getMovieById(movieId)!);
   }
+
+  //  Stream<MovieVO?> getMovieDetailsStream(int movieId) {
+  //   return getMovieBox().watch().map((event) => getMovieById(movieId));
+  // }
 
   Box<MovieVO> getMovieBox() {
     return Hive.box<MovieVO>(boxName_MovieVO);

@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:movie_app/data.vos/vos/actor_vo.dart';
-
+import 'package:rxdart/rxdart.dart';
 import '../hive_constants.dart';
 
 class ActorDao {
@@ -30,7 +30,10 @@ class ActorDao {
   }
 
   Stream<List<ActorVO>> getAllActorsListStream() {
-    return Stream.value(getAllActors().toList());
+    return getActorBox()
+        .watch()
+        .map((event) => getAllActors())
+        .startWith(getAllActors());
   }
 
   //take hiveBox name
