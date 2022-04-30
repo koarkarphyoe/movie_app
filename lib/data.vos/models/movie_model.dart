@@ -26,5 +26,5 @@ abstract class MovieModel {
   Stream<List<MovieVO>?>? getTopRatedFromDatabase();
   Stream<List<GenreVO>?>? getGenresFromDatabase();
   Stream<List<CreditVO>?>? getCreditsFromDatabase(int movieId);
-  Stream<MovieVO>? getMovieDetailsFromDatabase(int movieId);
+  Stream<MovieVO>? getMovieDetailsFromDatabase(int movieId,{bool isPopular});
 }

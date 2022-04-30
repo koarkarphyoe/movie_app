@@ -14,7 +14,8 @@ import 'package:movie_app/widgets/title_text.dart';
 
 class MovieDetailsPage extends StatefulWidget {
   final int movieId;
-  MovieDetailsPage(this.movieId);
+  final bool isPopular;
+  MovieDetailsPage(this.movieId,{this.isPopular = false});
   @override
   State<MovieDetailsPage> createState() => _MovieDetailsPageState();
 }
@@ -42,7 +43,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     // });
 
     //From database
-    mModel.getMovieDetailsFromDatabase(widget.movieId)?.listen((value) {
+    mModel.getMovieDetailsFromDatabase(widget.movieId,isPopular: widget.isPopular)?.listen((value) {
       setState(() {
         mMovie = value;
       });
@@ -55,6 +56,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     //     mCreatorsLists = value.where((element) => element.isCreator()).toList();
     //   });
     // });
+
 
     mModel.getCreditsFromDatabase(widget.movieId)?.listen((value) {
       setState(() {

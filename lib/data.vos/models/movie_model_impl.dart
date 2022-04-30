@@ -121,8 +121,13 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  void getMovieDetails(int movieId) {
+  void getMovieDetails(int movieId,{bool isPopular=false}) {
+    print('model $isPopular');
     mDataAgent.getMovieDetails(movieId).then((value) async {
+      if(isPopular){
+        value.isPopular = isPopular;
+        mMovieDao.saveSingleMovie(value);
+      }
       mMovieDao.saveSingleMovie(value);
       // return Future.value(value);
     });
@@ -142,8 +147,8 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  Stream<MovieVO>? getMovieDetailsFromDatabase(int movieId) {
-    getMovieDetails(movieId);
+  Stream<MovieVO>? getMovieDetailsFromDatabase(int movieId,{bool isPopular=false}) {
+    getMovieDetails(movieId,isPopular: isPopular);
     return mMovieDao.getMovieDetailsStream(movieId);
   }
 

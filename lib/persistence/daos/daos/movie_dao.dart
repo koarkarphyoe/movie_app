@@ -53,6 +53,10 @@ class MovieDao {
             .toList());
   }
 
+  List<MovieVO> getPopularMoviesList() {
+    return getAllMovie().where((e) => e.isPopular ?? false).toList();
+  }
+
   Stream<List<MovieVO>> getPopularMoviesStream() {
     return getMovieBox()
         .watch()
