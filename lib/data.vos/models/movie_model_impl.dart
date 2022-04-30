@@ -125,9 +125,8 @@ class MovieModelImpl extends MovieModel {
   @override
 
   void getMovieDetails(int movieId,{bool isPopular=false}) {
-    print('model $isPopular');
-
-   mDataAgent.getMovieDetails(movieId).then((value){
+    print('get data form network  $isPopular');
+    mDataAgent.getMovieDetails(movieId).then((value){
      if(isPopular){
        value.isPopular = isPopular;
        mMovieDao.saveSingleMovie(value);

@@ -78,8 +78,7 @@ class MovieDao {
   }
 
   Stream<MovieVO> getMovieDetailsStream(int movieId) {
-    return Stream.value(getMovieById(movieId)!)
-        .where((event) => event.isForDetails ?? false);
+    return Stream.value(getMovieById(movieId)!);
   }
 
   Box<MovieVO> getMovieBox() {

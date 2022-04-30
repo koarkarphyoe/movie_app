@@ -43,7 +43,9 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     // });
 
     //From database
+  //  print('detail page');
     mModel.getMovieDetailsFromDatabase(widget.movieId,isPopular: widget.isPopular)?.listen((value) {
+      print('detail $value');
       setState(() {
         mMovie = value;
       });
