@@ -229,12 +229,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<dynamic> _navigateToMovieDetailsPage(
-      BuildContext context, int movieId) {
+  Future<dynamic> _navigateToMovieDetailsPage(BuildContext context, int movieId,
+      {bool isForDetails = false}) {
     return Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => MovieDetailsPage(movieId),
+        builder: (context) =>
+            MovieDetailsPage(movieId, isForDetails: isForDetails),
       ),
     );
   }

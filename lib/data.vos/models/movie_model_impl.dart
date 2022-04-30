@@ -123,10 +123,13 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  void getMovieDetails(int movieId) {
-     mDataAgent.getMovieDetails(movieId).then((value) async {
-      value.isForDetails = true;
-      mMovieDao.saveSingleMovie(value);
+  void getMovieDetails(int movieId,{bool isForDetails=false}) {
+    print("network call is $isForDetails");
+    mDataAgent.getMovieDetails(movieId).then((value) async {
+      if (isForDetails) {
+        value.isForDetails = isForDetails;
+        mMovieDao.saveSingleMovie(value);
+      }
       // return Future.value(value);
     });
   }
@@ -145,8 +148,8 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  Stream<MovieVO>? getMovieDetailsFromDatabase(int movieId) {
-    getMovieDetails(movieId);
+  Stream<MovieVO>? getMovieDetailsFromDatabase(int movieId, bool isForDetails) {
+    getMovieDetails(movieId, isForDetails: isForDetails);
     return mMovieDao.getMovieDetailsStream(movieId);
   }
 

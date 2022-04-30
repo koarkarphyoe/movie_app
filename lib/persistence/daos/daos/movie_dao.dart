@@ -40,7 +40,7 @@ class MovieDao {
     return getMovieBox().watch();
   }
 
-   Stream<List<MovieVO>> getNowPlayingMoviesStream() {
+  Stream<List<MovieVO>> getNowPlayingMoviesStream() {
     return getMovieBox()
         .watch()
         .map((event) => getAllMovie()
@@ -74,8 +74,7 @@ class MovieDao {
   }
 
   Stream<MovieVO> getMovieDetailsStream(int movieId) {
-    return Stream.value(getMovieById(movieId)!)
-        .where((event) => event.isForDetails ?? false);
+    return Stream.value(getMovieById(movieId)!);
   }
 
   Box<MovieVO> getMovieBox() {

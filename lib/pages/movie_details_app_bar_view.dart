@@ -14,13 +14,13 @@ import 'package:movie_app/widgets/title_text.dart';
 
 class MovieDetailsPage extends StatefulWidget {
   final int movieId;
-  MovieDetailsPage(this.movieId);
+  final dynamic isForDetails;
+  MovieDetailsPage(this.movieId, {this.isForDetails=false});
   @override
   State<MovieDetailsPage> createState() => _MovieDetailsPageState();
 }
 
 class _MovieDetailsPageState extends State<MovieDetailsPage> {
-
   MovieModel mModel = MovieModelImpl();
   MovieVO? mMovie;
 
@@ -42,7 +42,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     // });
 
     //From database
-    mModel.getMovieDetailsFromDatabase(widget.movieId)?.listen((value) {
+    mModel.getMovieDetailsFromDatabase(widget.movieId,widget.isForDetails)?.listen((value) {
       setState(() {
         mMovie = value;
       });
