@@ -42,7 +42,6 @@ class MovieModelImpl extends MovieModel {
         e.isNowPlaying = true;
         e.isPopular = false;
         e.isTopRated = false;
-        e.isForDetails = false;
         return e;
       }).toList();
       mMovieDao.saveAllMovie(nowPlayingMovies);
@@ -75,7 +74,6 @@ class MovieModelImpl extends MovieModel {
         e.isNowPlaying = false;
         e.isPopular = true;
         e.isTopRated = false;
-        e.isForDetails = false;
         return e;
       }).toList();
       mMovieDao.saveAllMovie(popularMovies);
@@ -96,7 +94,6 @@ class MovieModelImpl extends MovieModel {
         e.isNowPlaying = false;
         e.isPopular = false;
         e.isTopRated = true;
-        e.isForDetails = false;
         return e;
       }).toList();
       mMovieDao.saveAllMovie(mTopRated);
@@ -127,7 +124,7 @@ class MovieModelImpl extends MovieModel {
     print("network call is $isForDetails");
     mDataAgent.getMovieDetails(movieId).then((value) async {
       if (isForDetails) {
-        value.isForDetails = isForDetails;
+        value.isPopular = isForDetails;
         mMovieDao.saveSingleMovie(value);
       }
       // return Future.value(value);

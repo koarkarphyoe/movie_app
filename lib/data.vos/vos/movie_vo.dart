@@ -124,10 +124,6 @@ class MovieVO {
 
   @HiveField(28)
   bool? isTopRated;
-
-  @HiveField(29)
-  bool? isForDetails;
-
   MovieVO(
       this.adult,
       this.backdropPath,
@@ -157,7 +153,8 @@ class MovieVO {
       this.voteCount,
       this.isNowPlaying,
       this.isPopular,
-      this.isTopRated);
+      this.isTopRated,
+      );
   factory MovieVO.fromJson(Map<String, dynamic> json) =>
       _$MovieVOFromJson(json);
 

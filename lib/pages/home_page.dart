@@ -230,7 +230,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<dynamic> _navigateToMovieDetailsPage(BuildContext context, int movieId,
-      {bool isForDetails = false}) {
+      {bool isForDetails = true}) {
     return Navigator.push(
       context,
       MaterialPageRoute(
