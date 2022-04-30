@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:movie_app/data.vos/vos/actor_vo.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:stream_transform/stream_transform.dart';
 import '../hive_constants.dart';
 
 class ActorDao {

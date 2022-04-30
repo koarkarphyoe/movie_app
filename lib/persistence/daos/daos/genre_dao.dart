@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:movie_app/data.vos/vos/genre_vo.dart';
 import 'package:movie_app/persistence/daos/hive_constants.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 class GenreDao {
   static final GenreDao _singleton = GenreDao._internal();

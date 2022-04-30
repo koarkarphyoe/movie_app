@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
     //   debugPrint("Error => ${error.toString()}");
     // });
 
-    //now playing from Database 
+    //now playing from Database
 
     mModel.getNowPlayingMoviesFromDatabase()!.listen((value) {
       setState(() {
@@ -145,8 +145,9 @@ class _HomePageState extends State<HomePage> {
         .listen((value) => {
               setState(() {
                 mGenreList = value;
+
                 ///Movies by Genres
-                _getMoviesGenreAndRefresh(mGenreList!.first.id);
+                _getMoviesGenreAndRefresh(mGenreList?.first.id ?? 0);
               })
             })
         .onError((error) {
@@ -441,9 +442,10 @@ class _BannerSectionViewState extends State<BannerSectionView> {
                 _position = page.toDouble();
               });
             },
-            children:
-                widget.mPopularMovieList?.map((movie) => BannerView(movie)).toList() ??
-                    [],
+            children: widget.mPopularMovieList
+                    ?.map((movie) => BannerView(movie))
+                    .toList() ??
+                [],
           ),
         ),
         SizedBox(height: MARGIN_MEDIUM),

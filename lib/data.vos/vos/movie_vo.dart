@@ -125,6 +125,9 @@ class MovieVO {
   @HiveField(28)
   bool? isTopRated;
 
+  @HiveField(29)
+  bool? isForDetails;
+
   MovieVO(
       this.adult,
       this.backdropPath,

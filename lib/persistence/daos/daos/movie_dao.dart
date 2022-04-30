@@ -1,9 +1,7 @@
-import 'dart:math';
-
 import 'package:hive/hive.dart';
 import 'package:movie_app/data.vos/vos/movie_vo.dart';
 import 'package:movie_app/persistence/daos/hive_constants.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 class MovieDao {
   static final MovieDao _singleton = MovieDao._internal();
@@ -42,7 +40,7 @@ class MovieDao {
     return getMovieBox().watch();
   }
 
-  Stream<List<MovieVO>> getNowPlayingMoviesStream() {
+   Stream<List<MovieVO>> getNowPlayingMoviesStream() {
     return getMovieBox()
         .watch()
         .map((event) => getAllMovie()
@@ -76,12 +74,9 @@ class MovieDao {
   }
 
   Stream<MovieVO> getMovieDetailsStream(int movieId) {
-    return Stream.value(getMovieById(movieId)!);
+    return Stream.value(getMovieById(movieId)!)
+        .where((event) => event.isForDetails ?? false);
   }
-
-  //  Stream<MovieVO?> getMovieDetailsStream(int movieId) {
-  //   return getMovieBox().watch().map((event) => getMovieById(movieId));
-  // }
 
   Box<MovieVO> getMovieBox() {
     return Hive.box<MovieVO>(boxName_MovieVO);

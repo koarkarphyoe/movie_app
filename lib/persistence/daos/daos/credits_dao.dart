@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:movie_app/data.vos/vos/credit_vo.dart';
 import 'package:movie_app/persistence/daos/hive_constants.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 class CreditsDao {
   static final CreditsDao _singleton = CreditsDao._internal();

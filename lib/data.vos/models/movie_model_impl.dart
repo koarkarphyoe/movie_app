@@ -9,7 +9,6 @@ import 'package:movie_app/persistence/daos/daos/actor_dao.dart';
 import 'package:movie_app/persistence/daos/daos/credits_dao.dart';
 import 'package:movie_app/persistence/daos/daos/genre_dao.dart';
 import 'package:movie_app/persistence/daos/daos/movie_dao.dart';
-import 'package:rxdart/rxdart.dart';
 
 class MovieModelImpl extends MovieModel {
   MovieDataAgent mDataAgent = RetrofitDataAgentImpl();
@@ -43,6 +42,7 @@ class MovieModelImpl extends MovieModel {
         e.isNowPlaying = true;
         e.isPopular = false;
         e.isTopRated = false;
+        e.isForDetails = false;
         return e;
       }).toList();
       mMovieDao.saveAllMovie(nowPlayingMovies);
@@ -75,6 +75,7 @@ class MovieModelImpl extends MovieModel {
         e.isNowPlaying = false;
         e.isPopular = true;
         e.isTopRated = false;
+        e.isForDetails = false;
         return e;
       }).toList();
       mMovieDao.saveAllMovie(popularMovies);
@@ -95,6 +96,7 @@ class MovieModelImpl extends MovieModel {
         e.isNowPlaying = false;
         e.isPopular = false;
         e.isTopRated = true;
+        e.isForDetails = false;
         return e;
       }).toList();
       mMovieDao.saveAllMovie(mTopRated);
@@ -122,7 +124,8 @@ class MovieModelImpl extends MovieModel {
 
   @override
   void getMovieDetails(int movieId) {
-    mDataAgent.getMovieDetails(movieId).then((value) async {
+     mDataAgent.getMovieDetails(movieId).then((value) async {
+      value.isForDetails = true;
       mMovieDao.saveSingleMovie(value);
       // return Future.value(value);
     });
