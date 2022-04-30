@@ -43,6 +43,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+
+
     // print(a! + 1);
 
     //now playing from Network
@@ -57,6 +59,7 @@ class _HomePageState extends State<HomePage> {
     //now playing from Database
 
     mModel.getNowPlayingMoviesFromDatabase()!.listen((value) {
+
       setState(() {
         mNowPlayingMovieList = value;
       });
@@ -75,6 +78,8 @@ class _HomePageState extends State<HomePage> {
 
     //BestPopular from Database
     mModel.getPopularMoviesFromDatabase()!.listen((value) {
+      // value?.map((e) => print(e.title)).toList();
+     // print(value?.length);
       setState(() {
         mPopularMovieList = value;
       });
@@ -195,12 +200,12 @@ class _HomePageState extends State<HomePage> {
             children: [
               ///Need to care banner count! => mResults?.take(8).toList()
               BannerSectionView(
-                mPopularMovieList: mPopularMovieList?.take(8).toList(),
+                mPopularMovieList: mNowPlayingMovieList?.take(8).toList(),
               ),
               SizedBox(height: MARGIN_MEDIUM),
               BestPopularMoviesAndSerialsSectionView(
-                (movieId) => _navigateToMovieDetailsPage(context, movieId),
-                mNowPlayingMovieList,
+                (movieId) => _navigateToMovieDetailsPage(context, movieId,isPopular: true),
+                mPopularMovieList,
               ),
               SizedBox(height: MARGIN_MEDIUM),
               MovieShowtimesSectionView(),
@@ -229,13 +234,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<dynamic> _navigateToMovieDetailsPage(BuildContext context, int movieId,
-      {bool isForDetails = true}) {
-    return Navigator.push(
+   _navigateToMovieDetailsPage(BuildContext context, int movieId,{bool isPopular =false}) {
+
+     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            MovieDetailsPage(movieId, isForDetails: isForDetails),
+        builder: (context) => MovieDetailsPage(movieId,isPopular: isPopular,),
       ),
     );
   }

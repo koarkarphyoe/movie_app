@@ -120,15 +120,15 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  void getMovieDetails(int movieId,{bool isForDetails=false}) {
-    print("network call is $isForDetails");
-    mDataAgent.getMovieDetails(movieId).then((value) async {
-      if (isForDetails) {
-        value.isPopular = isForDetails;
-        mMovieDao.saveSingleMovie(value);
-      }
-      // return Future.value(value);
-    });
+
+  void getMovieDetails(int movieId,{bool isPopular=false}) {
+    print('get data form network  $isPopular');
+    mDataAgent.getMovieDetails(movieId).then((value){
+     if(isPopular){
+       value.isPopular = isPopular;
+       mMovieDao.saveSingleMovie(value);
+     }
+   });
   }
 
   // Database Section or Persistence Layer (whith Hive) and Reactive Programming
@@ -145,8 +145,8 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  Stream<MovieVO>? getMovieDetailsFromDatabase(int movieId, bool isForDetails) {
-    getMovieDetails(movieId, isForDetails: isForDetails);
+  Stream<MovieVO>? getMovieDetailsFromDatabase(int movieId,{bool isPopular=false}) {
+    getMovieDetails(movieId,isPopular: isPopular);
     return mMovieDao.getMovieDetailsStream(movieId);
   }
 
