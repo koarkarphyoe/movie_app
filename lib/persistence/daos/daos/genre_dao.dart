@@ -23,10 +23,6 @@ class GenreDao {
   }
 
   ///Reactive Programming
-  Stream<void> getAllGenreEventStrem() {
-    return getGenreBox().watch();
-  }
-
   Stream<List<GenreVO>> getAllGenreListStream() {
     return getGenreBox()
         .watch()

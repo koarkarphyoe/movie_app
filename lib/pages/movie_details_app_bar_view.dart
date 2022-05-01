@@ -79,7 +79,6 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     return Scaffold(
       body: Container(
         color: SCREEN_BODY_BACKGROUND_COLOR,
-
         ///if mMovie not null will load data in customscrollview , if not circular loading bar will load
         child: (mMovie != null)
             ? CustomScrollView(

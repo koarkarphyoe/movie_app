@@ -109,7 +109,9 @@ class MovieModelImpl extends MovieModel {
 
   @override
   Future<List<MovieVO>> getMovieByGenre(int genreId) {
-    return mDataAgent.getMovieByGenres(genreId);
+    return mDataAgent.getMovieByGenres(genreId).then((value) {
+      return Future.value(value);
+    });
   }
 
   @override
@@ -142,7 +144,7 @@ class MovieModelImpl extends MovieModel {
 
   @override
   Stream<List<GenreVO>?>? getGenresFromDatabase() {
-    this.getGenres();
+    getGenres();
     return mGenreDao.getAllGenreListStream();
   }
 

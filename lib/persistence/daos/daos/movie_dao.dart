@@ -13,7 +13,6 @@ class MovieDao {
   MovieDao._internal();
 
   // save and get all movie list
-
   void saveAllMovie(List<MovieVO> movieList) async {
     Map<int, MovieVO> movieMap = Map.fromIterable(movieList,
         key: (movie) => movie.id, value: (movie) => movie);
@@ -25,7 +24,6 @@ class MovieDao {
   }
 
   // save and get movie by id for each movie
-
   void saveSingleMovie(MovieVO movie) async {
     await getMovieBox().put(movie.id, movie);
   }

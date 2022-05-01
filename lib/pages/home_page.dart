@@ -27,7 +27,6 @@ class _HomePageState extends State<HomePage> {
   /// Create Object for Model Components
   MovieModel mModel = MovieModelImpl();
 
-  ///nullable type
   List<MovieVO>? mNowPlayingMovieList;
   List<ActorVO>? mActorList;
   List<MovieVO>? mPopularMovieList;
@@ -150,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                 if (mGenreList != null) {
                   ///Movies by Genres
                   _getMoviesGenreAndRefresh(mGenreList!.first.id);
-                }else{
+                } else {
                   _getMoviesGenreAndRefresh(0);
                 }
               })
@@ -160,9 +159,9 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _getMoviesGenreAndRefresh(int id) {
+  void _getMoviesGenreAndRefresh(int genreId) {
     mModel
-        .getMovieByGenre(id)
+        .getMovieByGenre(genreId)
         .then((value) => {
               setState(() {
                 mMovieByGenre = value;
@@ -214,8 +213,8 @@ class _HomePageState extends State<HomePage> {
                 (movieId) => _navigateToMovieDetailsPage(context, movieId),
                 mGenreList,
                 mMovieByGenre,
-                onTapGenre: (int) {
-                  _getMoviesGenreAndRefresh(int);
+                onTapGenre: (int genreId) {
+                  _getMoviesGenreAndRefresh(genreId);
                 },
               ),
               SizedBox(height: MARGIN_MEDIUM),
