@@ -160,14 +160,22 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _getMoviesGenreAndRefresh(int genreId) {
-    mModel
-        .getMovieByGenre(genreId)
-        .then((value) => {
-              setState(() {
-                mMovieByGenre = value;
-              })
-            })
-        .catchError((error) {
+    // mModel
+    //     .getMovieByGenre(genreId)
+    //     .then((value) => {
+    //           setState(() {
+    //             mMovieByGenre = value;
+    //           })
+    //         })
+    //     .catchError((error) {
+    //   debugPrint(error.toString());
+    // });
+
+    mModel.getMovieListByGenreFromDatabase(genreId).listen((event) {
+      setState(() {
+        mMovieByGenre = event;
+      });
+    }).onError((error) {
       debugPrint(error.toString());
     });
   }

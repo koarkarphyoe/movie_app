@@ -110,6 +110,12 @@ class MovieModelImpl extends MovieModel {
   @override
   Future<List<MovieVO>> getMovieByGenre(int genreId) {
     return mDataAgent.getMovieByGenres(genreId).then((value) {
+      List<MovieVO> mTopRated = value.map((e) {
+        e.genreId = genreId;
+        print(e.genreId.toString());
+        return e;
+      }).toList();
+      mMovieDao.saveMovieListByGenreId(mTopRated, genreId);
       return Future.value(value);
     });
   }
@@ -127,8 +133,8 @@ class MovieModelImpl extends MovieModel {
       //must to reassign value.isPopular=true bcoz network data will overwrite on database with same movieId on memory
       value.isPopular = true;
       //optional!,no need to reassign under boolean data
-      value.isNowPlaying = true;
-      value.isTopRated = true;
+      // value.isNowPlaying = true;
+      // value.isTopRated = true;
 
       mMovieDao.saveSingleMovie(value);
     });
@@ -176,5 +182,11 @@ class MovieModelImpl extends MovieModel {
   Stream<List<CreditVO>?>? getCreditsFromDatabase(int movieId) {
     getCreditsByMovie(movieId);
     return mCreditDao.getAllCreditsListStream();
+  }
+
+  @override
+  Stream<List<MovieVO>> getMovieListByGenreFromDatabase(int genreId) {
+    getMovieByGenre(genreId);
+    return mMovieDao.getMovieListByGenreId(genreId);
   }
 }

@@ -27,4 +27,5 @@ abstract class MovieModel {
   Stream<List<GenreVO>?>? getGenresFromDatabase();
   Stream<List<CreditVO>?>? getCreditsFromDatabase(int movieId);
   Stream<MovieVO>? getMovieDetailsFromDatabase(int movieId);
+  Stream<List<MovieVO>> getMovieListByGenreFromDatabase(int genreId);
 }
