@@ -14,8 +14,7 @@ import 'package:movie_app/widgets/title_text.dart';
 
 class MovieDetailsPage extends StatefulWidget {
   final int movieId;
-  final bool isPopular;
-  MovieDetailsPage(this.movieId,{this.isPopular = false});
+  MovieDetailsPage(this.movieId);
   @override
   State<MovieDetailsPage> createState() => _MovieDetailsPageState();
 }
@@ -42,12 +41,18 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     // });
 
     //From database
-  //  print('detail page');
-    mModel.getMovieDetailsFromDatabase(widget.movieId,isPopular: widget.isPopular)?.listen((value) {
+    //  print('detail page');
+    mModel
+        .getMovieDetailsFromDatabase(
+      widget.movieId,
+    )
+        ?.listen((value) {
       print('detail $value');
-      setState(() {
-        mMovie = value;
-      });
+      if (mounted) {
+        setState(() {
+          mMovie = value;
+        });
+      }
     });
 
     ///for actor and creator
@@ -58,12 +63,14 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     //   });
     // });
 
-
     mModel.getCreditsFromDatabase(widget.movieId)?.listen((value) {
-      setState(() {
-        mActorLists = value!.where((element) => element.isActor()).toList();
-        mCreatorsLists = value.where((element) => element.isCreator()).toList();
-      });
+      if (mounted) {
+        setState(() {
+          mActorLists = value!.where((element) => element.isActor()).toList();
+          mCreatorsLists =
+              value.where((element) => element.isCreator()).toList();
+        });
+      }
     });
   }
 
@@ -460,7 +467,7 @@ class MovieDetailsYearAndVotesView extends StatelessWidget {
                     BorderRadius.circular(MOVIE_DETAILS_PLAY_BUTTON_HEIGHT_2),
               ),
               child: MovieDeatilsYearButtonView(
-                  mMovie!.releaseDate!.substring(0, 4)),
+                  mMovie!.releaseDate!.substring(0,4)),
             ),
             Spacer(),
             Row(

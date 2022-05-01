@@ -44,7 +44,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-
     // print(a! + 1);
 
     //now playing from Network
@@ -59,7 +58,6 @@ class _HomePageState extends State<HomePage> {
     //now playing from Database
 
     mModel.getNowPlayingMoviesFromDatabase()!.listen((value) {
-
       setState(() {
         mNowPlayingMovieList = value;
       });
@@ -78,10 +76,9 @@ class _HomePageState extends State<HomePage> {
 
     //BestPopular from Database
     mModel.getPopularMoviesFromDatabase()!.listen((value) {
-      // value?.map((e) => print(e.title)).toList();
-     // print(value?.length);
       setState(() {
         mPopularMovieList = value;
+        // print("Popular movie lengtn => ${mPopularMovieList?.length.toInt()}");
       });
     }).onError((error) {
       debugPrint(error.toString());
@@ -150,9 +147,12 @@ class _HomePageState extends State<HomePage> {
         .listen((value) => {
               setState(() {
                 mGenreList = value;
-
-                ///Movies by Genres
-                _getMoviesGenreAndRefresh(mGenreList?.first.id ?? 0);
+                if (mGenreList != null) {
+                  ///Movies by Genres
+                  _getMoviesGenreAndRefresh(mGenreList!.first.id);
+                }else{
+                  _getMoviesGenreAndRefresh(0);
+                }
               })
             })
         .onError((error) {
@@ -204,7 +204,7 @@ class _HomePageState extends State<HomePage> {
               ),
               SizedBox(height: MARGIN_MEDIUM),
               BestPopularMoviesAndSerialsSectionView(
-                (movieId) => _navigateToMovieDetailsPage(context, movieId,isPopular: true),
+                (movieId) => _navigateToMovieDetailsPage(context, movieId),
                 mPopularMovieList,
               ),
               SizedBox(height: MARGIN_MEDIUM),
@@ -234,12 +234,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-   _navigateToMovieDetailsPage(BuildContext context, int movieId,{bool isPopular =false}) {
-
-     Navigator.push(
+  _navigateToMovieDetailsPage(BuildContext context, int movieId) {
+    Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => MovieDetailsPage(movieId,isPopular: isPopular,),
+        builder: (context) => MovieDetailsPage(movieId),
       ),
     );
   }

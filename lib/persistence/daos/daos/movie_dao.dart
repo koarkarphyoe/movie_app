@@ -36,10 +36,6 @@ class MovieDao {
   }
 
   //Reactive Programming
-  Stream<void> getAllMoviesEventStream() {
-    return getMovieBox().watch();
-  }
-
   Stream<List<MovieVO>> getNowPlayingMoviesStream() {
     return getMovieBox()
         .watch()
@@ -49,10 +45,6 @@ class MovieDao {
         .startWith(getAllMovie()
             .where((element) => element.isNowPlaying ?? false)
             .toList());
-  }
-
-  List<MovieVO> getPopularMoviesList() {
-    return getAllMovie().where((e) => e.isPopular ?? false).toList();
   }
 
   Stream<List<MovieVO>> getPopularMoviesStream() {
@@ -78,7 +70,10 @@ class MovieDao {
   }
 
   Stream<MovieVO> getMovieDetailsStream(int movieId) {
-    return Stream.value(getMovieById(movieId)!);
+    return getMovieBox()
+        .watch()
+        .map((event) => getMovieById(movieId)!)
+        .startWith(getMovieById(movieId)!);
   }
 
   Box<MovieVO> getMovieBox() {

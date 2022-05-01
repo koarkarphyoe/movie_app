@@ -25,9 +25,6 @@ class ActorDao {
   }
 
   ///Reactive programming
-  Stream<void> getAllActorsEventStream() {
-    return getActorBox().watch();
-  }
 
   Stream<List<ActorVO>> getAllActorsListStream() {
     return getActorBox()

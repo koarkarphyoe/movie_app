@@ -120,21 +120,23 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
+  void getMovieDetails(int movieId) {
+    mDataAgent.getMovieDetails(movieId).then((value) {
+      //must to reassign value.isPopular=true bcoz network data will overwrite on database with same movieId on memory
+      value.isPopular = true;
+      //optional!,no need to reassign under boolean data
+      value.isNowPlaying = true;
+      value.isTopRated = true;
 
-  void getMovieDetails(int movieId,{bool isPopular=false}) {
-    print('get data form network  $isPopular');
-    mDataAgent.getMovieDetails(movieId).then((value){
-     if(isPopular){
-       value.isPopular = isPopular;
-       mMovieDao.saveSingleMovie(value);
-     }
-   });
+      mMovieDao.saveSingleMovie(value);
+    });
   }
 
   // Database Section or Persistence Layer (whith Hive) and Reactive Programming
 
   @override
   Stream<List<ActorVO>?>? getActorsFromDatabase() {
+    this.getActors(1);
     return mActorDao.getAllActorsListStream();
   }
 
@@ -145,8 +147,8 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  Stream<MovieVO>? getMovieDetailsFromDatabase(int movieId,{bool isPopular=false}) {
-    getMovieDetails(movieId,isPopular: isPopular);
+  Stream<MovieVO>? getMovieDetailsFromDatabase(int movieId) {
+    getMovieDetails(movieId);
     return mMovieDao.getMovieDetailsStream(movieId);
   }
 
@@ -170,6 +172,7 @@ class MovieModelImpl extends MovieModel {
 
   @override
   Stream<List<CreditVO>?>? getCreditsFromDatabase(int movieId) {
+    getCreditsByMovie(movieId);
     return mCreditDao.getAllCreditsListStream();
   }
 }

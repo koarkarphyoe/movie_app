@@ -27,9 +27,6 @@ class GenreDao {
     return getGenreBox().watch();
   }
 
-  // Stream<List<GenreVO>> getAllGenreListStream() {
-  //   return Stream.value(getAllGenre().toList());
-  // }
   Stream<List<GenreVO>> getAllGenreListStream() {
     return getGenreBox()
         .watch()

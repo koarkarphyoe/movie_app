@@ -21,10 +21,6 @@ class CreditsDao {
   }
 
   //Reactive Programming
-  Stream<void> getAllCreditsEventStream() {
-    return getCreditsBox().watch();
-  }
-
   Stream<List<CreditVO>> getAllCreditsListStream() {
     return getCreditsBox()
         .watch()
