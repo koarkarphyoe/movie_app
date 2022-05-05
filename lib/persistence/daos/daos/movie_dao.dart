@@ -23,22 +23,22 @@ class MovieDao {
     return getMovieBox().values.toList();
   }
 
-  void saveMovieListByGenreId(List<MovieVO> movieList, int genreId) async {
-    Map<int, MovieVO> movieMap = Map.fromIterable(movieList,
-        key: (movie) => movie.id, value: (movie) => movie);
-    await getMovieBox().putAll(movieMap);
-  }
+  // void saveMovieListByGenreId(List<MovieVO> movieList, int genreId) async {
+  //   Map<int, MovieVO> movieMap = Map.fromIterable(movieList,
+  //       key: (movie) => movie.id, value: (movie) => movie);
+  //   await getMovieBox().putAll(movieMap);
+  // }
 
-  Stream<List<MovieVO>> getMovieListByGenreId(int genreId) {
-    return getMovieBox()
-        .watch()
-        .map((event) => getAllMovie()
-            .where((element) => element.genreId == genreId)
-            .toList())
-        .startWith(getAllMovie()
-            .where((element) => element.genreId == genreId)
-            .toList());
-  }
+  // Stream<List<MovieVO>> getMovieListByGenreId(int genreId) {
+  //   return getMovieBox()
+  //       .watch()
+  //       .map((event) => getAllMovie()
+  //           .where((element) => element.genreId == genreId)
+  //           .toList())
+  //       .startWith(getAllMovie()
+  //           .where((element) => element.genreId == genreId)
+  //           .toList());
+  // }
 
   // save and get movie by id for each movie
   void saveSingleMovie(MovieVO movie) async {
