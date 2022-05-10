@@ -26,11 +26,8 @@ class MovieModelImpl extends MovieModel {
   ActorDao mActorDao = ActorDao();
   GenreDao mGenreDao = GenreDao();
   CreditsDao mCreditDao = CreditsDao();
-<<<<<<< HEAD
   MovieDetailsDao movieDetailsDao = MovieDetailsDao();
-=======
   MovieByGenresDao movieByGenresDao = MovieByGenresDao();
->>>>>>> f6c5b29e7a145fa7ab51c800f9d720bdd6e7b69f
 
   // Network Section
 

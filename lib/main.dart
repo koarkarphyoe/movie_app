@@ -31,11 +31,8 @@ void main() async {
   await Hive.openBox<MovieVO>(boxName_MovieVO);
   await Hive.openBox<GenreVO>(boxName_GenreVO);
   await Hive.openBox<CreditVO>(boxName_CreditVO);
-<<<<<<< HEAD
   await Hive.openBox<MovieVO>(boxName_MovieDetails);
-=======
   await Hive.openBox<MovieVO>(boxName_MovieByGenre);
->>>>>>> f6c5b29e7a145fa7ab51c800f9d720bdd6e7b69f
   // to check network data
   // MovieModelImpl()
   //     .getNowPlayingMovies(1)
