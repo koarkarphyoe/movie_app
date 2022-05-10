@@ -46,8 +46,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
         .getMovieDetailsFromDatabase(
       widget.movieId,
     )
-        ?.listen((value) {
-      print('detail $value');
+        .listen((value) {
+      // print('detail $value');
       if (mounted) {
         setState(() {
           mMovie = value;
@@ -76,68 +76,68 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: SCREEN_BODY_BACKGROUND_COLOR,
-        ///if mMovie not null will load data in customscrollview , if not circular loading bar will load
-        child: (mMovie != null)
-            ? CustomScrollView(
-                slivers: [
-                  SliverAppBar(
-                    automaticallyImplyLeading: false,
-                    collapsedHeight: SLIVER_APP_BAR_COLLAPSED_HEIGHT,
-                    expandedHeight: SLIVER_APP_BAR_EXPANDED_HEIGHT,
-                    backgroundColor: PRIMARY_COLOR,
-                    flexibleSpace: MovieDetailsScreenSectionView(() {
-                      Navigator.pop(context);
-                    }, mMovie),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate(
-                      [
-                        Container(
-                          margin: EdgeInsets.only(
-                              left: MARGIN_MEDIUM_LARGE,
-                              bottom: MARGIN_MEDIUM_XLARGE),
-                          child: Column(
-                            children: [
-                              MovieTimeAndGenreView(mMovie),
-                              SizedBox(height: MARGIN_MEDIUM_XLARGE),
-                              StorylineSectionView(mMovie),
-                              SizedBox(height: MARGIN_MEDIUM_LARGE),
-                              PlayTrailerAndRateMovieView(),
-                            ],
-                          ),
-                        ),
-                        ActorsAndCreatorsView(
-                          MOVIE_DETAILS_ACTORS,
-                          "",
-                          mActorList: this.mActorLists,
-                          showMoreTextVisility: false,
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(MARGIN_MEDIUM_LARGE),
-                          child: AboutFilmSectionView(mMovie),
-                        ),
+    return (mMovie != null)
+        ? Scaffold(
+            body: Container(
+                color: SCREEN_BODY_BACKGROUND_COLOR,
 
-                        /// in some movie api, creator name and profilePath not have
-                        mCreatorsLists != null && mCreatorsLists!.isNotEmpty
-                            ? ActorsAndCreatorsView(
-                                MOVIE_DETAILS_CREATORS,
-                                MOVIE_DETAILS_MORE_CREATORS,
-                                mActorList: this.mCreatorsLists,
-                              )
-                            : Container(),
-                      ],
+                ///if mMovie not null will load data in customscrollview , if not circular loading bar will load
+                child: CustomScrollView(
+                  slivers: [
+                    SliverAppBar(
+                      automaticallyImplyLeading: false,
+                      collapsedHeight: SLIVER_APP_BAR_COLLAPSED_HEIGHT,
+                      expandedHeight: SLIVER_APP_BAR_EXPANDED_HEIGHT,
+                      backgroundColor: PRIMARY_COLOR,
+                      flexibleSpace: MovieDetailsScreenSectionView(() {
+                        Navigator.pop(context);
+                      }, mMovie),
                     ),
-                  ),
-                ],
-              )
-            : Center(
-                child: CircularProgressIndicator(),
-              ),
-      ),
-    );
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          Container(
+                            margin: EdgeInsets.only(
+                                left: MARGIN_MEDIUM_LARGE,
+                                bottom: MARGIN_MEDIUM_XLARGE),
+                            child: Column(
+                              children: [
+                                MovieTimeAndGenreView(mMovie),
+                                SizedBox(height: MARGIN_MEDIUM_XLARGE),
+                                StorylineSectionView(mMovie),
+                                SizedBox(height: MARGIN_MEDIUM_LARGE),
+                                PlayTrailerAndRateMovieView(),
+                              ],
+                            ),
+                          ),
+                          ActorsAndCreatorsView(
+                            MOVIE_DETAILS_ACTORS,
+                            "",
+                            mActorList: this.mActorLists,
+                            showMoreTextVisility: false,
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(MARGIN_MEDIUM_LARGE),
+                            child: AboutFilmSectionView(mMovie),
+                          ),
+
+                          /// in some movie api, creator name and profilePath not have
+                          mCreatorsLists != null && mCreatorsLists!.isNotEmpty
+                              ? ActorsAndCreatorsView(
+                                  MOVIE_DETAILS_CREATORS,
+                                  MOVIE_DETAILS_MORE_CREATORS,
+                                  mActorList: this.mCreatorsLists,
+                                )
+                              : Container(),
+                        ],
+                      ),
+                    ),
+                  ],
+                )),
+          )
+        : Center(
+            child: CircularProgressIndicator(),
+          );
   }
 }
 
@@ -466,7 +466,7 @@ class MovieDetailsYearAndVotesView extends StatelessWidget {
                     BorderRadius.circular(MOVIE_DETAILS_PLAY_BUTTON_HEIGHT_2),
               ),
               child: MovieDeatilsYearButtonView(
-                  mMovie!.releaseDate!.substring(0,4)),
+                  mMovie!.releaseDate!.substring(0, 4)),
             ),
             Spacer(),
             Row(

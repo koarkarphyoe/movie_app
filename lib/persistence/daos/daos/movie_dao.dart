@@ -40,15 +40,16 @@ class MovieDao {
             .toList());
   }
 
-  // save and get movie by id for each movie
-  void saveSingleMovie(MovieVO movie) async {
-    await getMovieBox().put(movie.id, movie);
-  }
+  //Will override database,so need to create different Hive box for movie details!
+  // // save and get movie by id for each movie
+  // void saveSingleMovie(MovieVO movie) async {
+  //   await getMovieBox().put(movie.id, movie);
+  // }
 
-  // why movieId use? ,Movies are saved by id in saveAllMovie() and saveSingleMovie()
-  MovieVO? getMovieById(int movieId) {
-    return getMovieBox().get(movieId);
-  }
+  // // why movieId use? ,Movies are saved by id in saveAllMovie() and saveSingleMovie()
+  // MovieVO? getMovieById(int movieId) {
+  //   return getMovieBox().get(movieId);
+  // }
 
   //Reactive Programming
   Stream<List<MovieVO>> getNowPlayingMoviesStream() {
@@ -84,12 +85,12 @@ class MovieDao {
             .toList());
   }
 
-  Stream<MovieVO> getMovieDetailsStream(int movieId) {
-    return getMovieBox()
-        .watch()
-        .map((event) => getMovieById(movieId)!)
-        .startWith(getMovieById(movieId)!);
-  }
+  // Stream<MovieVO> getMovieDetailsStream(int movieId) {
+  //   return getMovieBox()
+  //       .watch()
+  //       .map((event) => getMovieById(movieId)!)
+  //       .startWith(getMovieById(movieId)!);
+  // }
 
   Box<MovieVO> getMovieBox() {
     return Hive.box<MovieVO>(boxName_MovieVO);

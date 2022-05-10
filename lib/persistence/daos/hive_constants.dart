@@ -18,6 +18,7 @@ const String boxName_CreditVO = "BOX_NAME_CREDIT_VO";
 const String boxName_DateVO = "BOX_NAME_DATE_VO";
 const String boxName_GenreVO = "BOX_NAME_GENRE_VO";
 const String boxName_MovieVO = "BOX_NAME_MOVIE_VO";
+const String boxName_MovieDetails = "BOX_NAME_MOVIE_DETAILS";
 const String boxName_ProductionCompanyVO = "BOX_NAME_PRODUCTION_COMPANY_VO";
 const String boxName_ProductionCountryVO = "BOX_NAME_PRODUCTION_COUNTRY_VO";
 const String boxName_SpokenLanguageVO = "BOX_NAME_SPOKEN_LANGUAGE_VO";

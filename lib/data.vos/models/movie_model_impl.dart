@@ -9,6 +9,7 @@ import 'package:movie_app/persistence/daos/daos/actor_dao.dart';
 import 'package:movie_app/persistence/daos/daos/credits_dao.dart';
 import 'package:movie_app/persistence/daos/daos/genre_dao.dart';
 import 'package:movie_app/persistence/daos/daos/movie_dao.dart';
+import 'package:movie_app/persistence/daos/daos/movie_details_dao.dart';
 
 class MovieModelImpl extends MovieModel {
   MovieDataAgent mDataAgent = RetrofitDataAgentImpl();
@@ -24,6 +25,7 @@ class MovieModelImpl extends MovieModel {
   ActorDao mActorDao = ActorDao();
   GenreDao mGenreDao = GenreDao();
   CreditsDao mCreditDao = CreditsDao();
+  MovieDetailsDao movieDetailsDao = MovieDetailsDao();
 
   // Network Section
 
@@ -130,13 +132,14 @@ class MovieModelImpl extends MovieModel {
   @override
   void getMovieDetails(int movieId) {
     mDataAgent.getMovieDetails(movieId).then((value) {
+      //if use only one MovieDao,need to use flag,but will conflict some movie list section,bcoz movie data will override in database
       //must to reassign value.isPopular=true bcoz network data will overwrite on database with same movieId on memory
-      value.isPopular = true;
+      // value.isPopular = true;
       //optional!,no need to reassign under boolean data
       // value.isNowPlaying = true;
       // value.isTopRated = true;
 
-      mMovieDao.saveSingleMovie(value);
+      movieDetailsDao.saveSingleMovie(value);
     });
   }
 
@@ -155,9 +158,9 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  Stream<MovieVO>? getMovieDetailsFromDatabase(int movieId) {
+  Stream<MovieVO?> getMovieDetailsFromDatabase(int movieId) {
     getMovieDetails(movieId);
-    return mMovieDao.getMovieDetailsStream(movieId);
+    return movieDetailsDao.getMovieDetailsStream(movieId);
   }
 
   @override
