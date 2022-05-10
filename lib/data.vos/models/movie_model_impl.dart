@@ -8,6 +8,7 @@ import 'package:movie_app/network/retrofit_data_agent_impl.dart';
 import 'package:movie_app/persistence/daos/daos/actor_dao.dart';
 import 'package:movie_app/persistence/daos/daos/credits_dao.dart';
 import 'package:movie_app/persistence/daos/daos/genre_dao.dart';
+import 'package:movie_app/persistence/daos/daos/movie_by_genres_dao.dart';
 import 'package:movie_app/persistence/daos/daos/movie_dao.dart';
 import 'package:movie_app/persistence/daos/daos/movie_details_dao.dart';
 
@@ -25,7 +26,11 @@ class MovieModelImpl extends MovieModel {
   ActorDao mActorDao = ActorDao();
   GenreDao mGenreDao = GenreDao();
   CreditsDao mCreditDao = CreditsDao();
+<<<<<<< HEAD
   MovieDetailsDao movieDetailsDao = MovieDetailsDao();
+=======
+  MovieByGenresDao movieByGenresDao = MovieByGenresDao();
+>>>>>>> f6c5b29e7a145fa7ab51c800f9d720bdd6e7b69f
 
   // Network Section
 
@@ -117,7 +122,7 @@ class MovieModelImpl extends MovieModel {
         print(e.genreId.toString());
         return e;
       }).toList();
-      mMovieDao.saveMovieListByGenreId(mTopRated, genreId);
+      movieByGenresDao.saveMovieListByGenreId(mTopRated, genreId);
       return Future.value(value);
     });
   }
@@ -190,6 +195,6 @@ class MovieModelImpl extends MovieModel {
   @override
   Stream<List<MovieVO>> getMovieListByGenreFromDatabase(int genreId) {
     getMovieByGenre(genreId);
-    return mMovieDao.getMovieListByGenreId(genreId);
+    return movieByGenresDao.getMovieListByGenreId(genreId);
   }
 }

@@ -22,3 +22,4 @@ const String boxName_MovieDetails = "BOX_NAME_MOVIE_DETAILS";
 const String boxName_ProductionCompanyVO = "BOX_NAME_PRODUCTION_COMPANY_VO";
 const String boxName_ProductionCountryVO = "BOX_NAME_PRODUCTION_COUNTRY_VO";
 const String boxName_SpokenLanguageVO = "BOX_NAME_SPOKEN_LANGUAGE_VO";
+const String boxName_MovieByGenre = "BOX_NAME_MOVIE_BY_GENRE";
