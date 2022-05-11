@@ -13,7 +13,8 @@ abstract class MovieModel {
   void getPopularMovies(int page); //After Reactive Programming Implementation
   void getTopRated(int page); //After Reactive Programming Implementation
   void getActors(int page);
-  Future<List<MovieVO>> getMovieByGenre(int genreId);
+  // Future<List<MovieVO>> getMovieByGenre(int genreId);//Before migrate to Reactive Programming
+  void getMovieByGenre(int genreId);//After migrate to Reactive Programming
   void getGenres();
   void getCreditsByMovie(int movieId);
   void getMovieDetails(int movieId);

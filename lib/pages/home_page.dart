@@ -146,11 +146,11 @@ class _HomePageState extends State<HomePage> {
         .listen((value) => {
               setState(() {
                 mGenreList = value;
-                if (mGenreList != null) {
+                if (mGenreList!.isNotEmpty) {
                   ///Movies by Genres
                   _getMoviesGenreAndRefresh(mGenreList!.first.id);
                 } else {
-                  _getMoviesGenreAndRefresh(0);
+                  [];
                 }
               })
             })

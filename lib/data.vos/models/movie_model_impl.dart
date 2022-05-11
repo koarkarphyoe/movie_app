@@ -110,17 +110,30 @@ class MovieModelImpl extends MovieModel {
       mGenreDao.saveAllGenre(value);
     });
   }
+  //Before migrate to Reactive Programming
+  // @override
+  // Future<List<MovieVO>> getMovieByGenre(int genreId) {
+  //   return mDataAgent.getMovieByGenres(genreId).then((value) {
+  //     List<MovieVO> mTopRated = value.map((e) {
+  //       e.genreId = genreId;
+  //       print(e.genreId.toString());
+  //       return e;
+  //     }).toList();
+  //     movieByGenresDao.saveMovieListByGenreId(mTopRated, genreId);
+  //     return Future.value(value);
+  //   });
+  // }
 
-  @override
-  Future<List<MovieVO>> getMovieByGenre(int genreId) {
-    return mDataAgent.getMovieByGenres(genreId).then((value) {
+  //After migrate to Reactive Programming
+    @override
+  void getMovieByGenre(int genreId) {
+     mDataAgent.getMovieByGenres(genreId).then((value) {
       List<MovieVO> mTopRated = value.map((e) {
         e.genreId = genreId;
         print(e.genreId.toString());
         return e;
       }).toList();
       movieByGenresDao.saveMovieListByGenreId(mTopRated, genreId);
-      return Future.value(value);
     });
   }
 

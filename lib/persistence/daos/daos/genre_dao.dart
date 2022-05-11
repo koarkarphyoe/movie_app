@@ -24,10 +24,12 @@ class GenreDao {
 
   ///Reactive Programming
   Stream<List<GenreVO>> getAllGenreListStream() {
-    return getGenreBox()
+    return 
+      getGenreBox()
         .watch()
         .map((event) => getAllGenre())
         .startWith(getAllGenre());
+    
   }
 
   Box<GenreVO> getGenreBox() {
