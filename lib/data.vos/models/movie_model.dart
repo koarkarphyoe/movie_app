@@ -5,22 +5,17 @@ import 'package:movie_app/data.vos/vos/movie_vo.dart';
 
 abstract class MovieModel {
   //Network
-  // Future<List<MovieVO>?>? getNowPlayingMovies(int page); //Before Reactive Programming Implementation
-  // Future<List<MovieVO>?>? getPopularMovies(int page); //Before Reactive Programming Implementation
-  // Future<List<MovieVO>?>? getTopRated(int page); //Before Reactive Programming Implementation
   void getNowPlayingMovies(
-      int page); //After Reactive Programming Implementation
-  void getPopularMovies(int page); //After Reactive Programming Implementation
-  void getTopRated(int page); //After Reactive Programming Implementation
+      int page); 
+  void getPopularMovies(int page);
+  void getTopRated(int page);
   void getActors(int page);
-  // Future<List<MovieVO>> getMovieByGenre(int genreId);//Before migrate to Reactive Programming
-  void getMovieByGenre(int genreId);//After migrate to Reactive Programming
+  void getMovieByGenre(int genreId);
   void getGenres();
   void getCreditsByMovie(int movieId);
   void getMovieDetails(int movieId);
 
   //Database
-
   Stream<List<MovieVO>?>? getNowPlayingMoviesFromDatabase();
   Stream<List<MovieVO>?>? getPopularMoviesFromDatabase();
   Stream<List<ActorVO>?>? getActorsFromDatabase();

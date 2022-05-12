@@ -29,19 +29,9 @@ class MovieModelImpl extends MovieModel {
   MovieDetailsDao movieDetailsDao = MovieDetailsDao();
   MovieByGenresDao movieByGenresDao = MovieByGenresDao();
 
-  // Network Section
-
-  // Before integration Persistence Layer's Entities and Daos,called data from network directly and show in View layer
-  // @override
-  // Future<List<MovieVO>> getNowPlayingMovies(int page) {
-  //   return mDataAgent.getNowPlayingMovies(page);
-  // }
-
-  // After integration Persistence Layers
   @override
   void getNowPlayingMovies(int page) {
     mDataAgent.getNowPlayingMovies(page).then((movies) async {
-      // e is MovieVO element
       List<MovieVO> nowPlayingMovies = movies.map((e) {
         e.isNowPlaying = true;
         e.isPopular = false;
@@ -49,28 +39,8 @@ class MovieModelImpl extends MovieModel {
         return e;
       }).toList();
       mMovieDao.saveAllMovie(nowPlayingMovies);
-      // return Future.value(movies);
     });
   }
-
-  //Before Reactive Programming Implementation
-  // @override
-  // Future<List<MovieVO>> getPopularMovies(int page) {
-  //   return mDataAgent.getPopularMovies(page).then((value) async {
-  //     List<MovieVO> popularMovies = value.map((e) {
-  //       e.isNowPlaying = false;
-  //       e.isPopular = true;
-  //       e.isTopRated = false;
-  //       return e;
-  //     }).toList();
-
-  //     mMovieDao.saveAllMovie(popularMovies);
-
-  //     return Future.value(value);
-  //   });
-  // }
-
-  //After Reactive Programming Implementation
   @override
   void getPopularMovies(int page) {
     mDataAgent.getPopularMovies(page).then((value) async {
@@ -110,27 +80,12 @@ class MovieModelImpl extends MovieModel {
       mGenreDao.saveAllGenre(value);
     });
   }
-  //Before migrate to Reactive Programming
-  // @override
-  // Future<List<MovieVO>> getMovieByGenre(int genreId) {
-  //   return mDataAgent.getMovieByGenres(genreId).then((value) {
-  //     List<MovieVO> mTopRated = value.map((e) {
-  //       e.genreId = genreId;
-  //       print(e.genreId.toString());
-  //       return e;
-  //     }).toList();
-  //     movieByGenresDao.saveMovieListByGenreId(mTopRated, genreId);
-  //     return Future.value(value);
-  //   });
-  // }
 
-  //After migrate to Reactive Programming
-    @override
+  @override
   void getMovieByGenre(int genreId) {
-     mDataAgent.getMovieByGenres(genreId).then((value) {
+    mDataAgent.getMovieByGenres(genreId).then((value) {
       List<MovieVO> mTopRated = value.map((e) {
         e.genreId = genreId;
-        print(e.genreId.toString());
         return e;
       }).toList();
       movieByGenresDao.saveMovieListByGenreId(mTopRated, genreId);
@@ -147,19 +102,11 @@ class MovieModelImpl extends MovieModel {
   @override
   void getMovieDetails(int movieId) {
     mDataAgent.getMovieDetails(movieId).then((value) {
-      //if use only one MovieDao,need to use flag,but will conflict some movie list section,bcoz movie data will override in database
-      //must to reassign value.isPopular=true bcoz network data will overwrite on database with same movieId on memory
-      // value.isPopular = true;
-      //optional!,no need to reassign under boolean data
-      // value.isNowPlaying = true;
-      // value.isTopRated = true;
-
       movieDetailsDao.saveSingleMovie(value);
     });
   }
 
   // Database Section or Persistence Layer (whith Hive) and Reactive Programming
-
   @override
   Stream<List<ActorVO>?>? getActorsFromDatabase() {
     this.getActors(1);
