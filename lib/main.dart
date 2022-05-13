@@ -6,7 +6,6 @@ import 'package:movie_app/data.vos/vos/movie_vo.dart';
 import 'package:movie_app/data.vos/vos/spoken_language_vo.dart';
 import 'package:movie_app/pages/home_page.dart';
 import 'package:movie_app/persistence/daos/hive_constants.dart';
-
 import 'data.vos/vos/collection_vo.dart';
 import 'data.vos/vos/credit_vo.dart';
 import 'data.vos/vos/date_vo.dart';

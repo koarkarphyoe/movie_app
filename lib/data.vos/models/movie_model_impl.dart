@@ -41,6 +41,7 @@ class MovieModelImpl extends MovieModel {
       mMovieDao.saveAllMovie(nowPlayingMovies);
     });
   }
+
   @override
   void getPopularMovies(int page) {
     mDataAgent.getPopularMovies(page).then((value) async {

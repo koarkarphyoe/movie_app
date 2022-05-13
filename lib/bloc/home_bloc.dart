@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:movie_app/data.vos/models/movie_model.dart';
 import 'package:movie_app/data.vos/models/movie_model_impl.dart';
-
 import '../data.vos/vos/actor_vo.dart';
 import '../data.vos/vos/genre_vo.dart';
 import '../data.vos/vos/movie_vo.dart';
