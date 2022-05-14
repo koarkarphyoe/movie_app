@@ -127,10 +127,9 @@ class MovieModelImpl extends MovieModel {
   //After migrate to Reactive Programming
     @override
   void getMovieByGenre(int genreId) {
-     mDataAgent.getMovieByGenres(genreId).then((value) {
+    mDataAgent.getMovieByGenres(genreId).then((value) {
       List<MovieVO> mTopRated = value.map((e) {
         e.genreId = genreId;
-        print(e.genreId.toString());
         return e;
       }).toList();
       movieByGenresDao.saveMovieListByGenreId(mTopRated, genreId);

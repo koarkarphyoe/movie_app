@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/data.vos/models/movie_model.dart';
-import 'package:movie_app/data.vos/models/movie_model_impl.dart';
-import 'package:movie_app/data.vos/vos/credit_vo.dart';
+import 'package:movie_app/bloc/movie_details_bloc.dart';
 import 'package:movie_app/data.vos/vos/movie_vo.dart';
 import 'package:movie_app/network/api_constants.dart';
 import 'package:movie_app/resources/colors.dart';
@@ -11,133 +9,72 @@ import 'package:movie_app/widgets/actors_and_creators_view.dart';
 import 'package:movie_app/widgets/gradient_view.dart';
 import 'package:movie_app/widgets/movie_rating_bar.dart';
 import 'package:movie_app/widgets/title_text.dart';
+import 'package:provider/provider.dart';
 
-class MovieDetailsPage extends StatefulWidget {
+class MovieDetailsPage extends StatelessWidget {
   final int movieId;
   MovieDetailsPage(this.movieId);
-  @override
-  State<MovieDetailsPage> createState() => _MovieDetailsPageState();
-}
-
-class _MovieDetailsPageState extends State<MovieDetailsPage> {
-  MovieModel mModel = MovieModelImpl();
-  MovieVO? mMovie;
-
-  /// data bind from one endPoint and store to two variable for actor and creator ("known_for_department")
-  List<CreditVO>? mActorLists;
-  List<CreditVO>? mCreatorsLists;
-
-  @override
-  void initState() {
-    super.initState();
-
-    //form network
-    /// if you call widget level movieId variable from state object , need to use "widget."
-    /// movieId is passed from home page carry to this page
-    // mModel.getMovieDetails(widget.movieId)!.then((value) {
-    //   setState(() {
-    //     mMovie = value;
-    //   });
-    // });
-
-    //From database
-    //  print('detail page');
-    mModel
-        .getMovieDetailsFromDatabase(
-      widget.movieId,
-    )
-        .listen((value) {
-      // print('detail $value');
-      if (mounted) {
-        setState(() {
-          mMovie = value;
-        });
-      }
-    });
-
-    ///for actor and creator
-    // mModel.getCreditsByMovie(widget.movieId)!.then((value) {
-    //   setState(() {
-    //     mActorLists = value!.where((element) => element.isActor()).toList();
-    //     mCreatorsLists = value.where((element) => element.isCreator()).toList();
-    //   });
-    // });
-
-    mModel.getCreditsFromDatabase(widget.movieId)?.listen((value) {
-      if (mounted) {
-        setState(() {
-          mActorLists = value!.where((element) => element.isActor()).toList();
-          mCreatorsLists =
-              value.where((element) => element.isCreator()).toList();
-        });
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    return (mMovie != null)
-        ? Scaffold(
-            body: Container(
-                color: SCREEN_BODY_BACKGROUND_COLOR,
-
-                ///if mMovie not null will load data in customscrollview , if not circular loading bar will load
-                child: CustomScrollView(
-                  slivers: [
-                    SliverAppBar(
-                      automaticallyImplyLeading: false,
-                      collapsedHeight: SLIVER_APP_BAR_COLLAPSED_HEIGHT,
-                      expandedHeight: SLIVER_APP_BAR_EXPANDED_HEIGHT,
-                      backgroundColor: PRIMARY_COLOR,
-                      flexibleSpace: MovieDetailsScreenSectionView(() {
-                        Navigator.pop(context);
-                      }, mMovie),
-                    ),
-                    SliverList(
-                      delegate: SliverChildListDelegate(
-                        [
-                          Container(
-                            margin: EdgeInsets.only(
-                                left: MARGIN_MEDIUM_LARGE,
-                                bottom: MARGIN_MEDIUM_XLARGE),
-                            child: Column(
-                              children: [
-                                MovieTimeAndGenreView(mMovie),
-                                SizedBox(height: MARGIN_MEDIUM_XLARGE),
-                                StorylineSectionView(mMovie),
-                                SizedBox(height: MARGIN_MEDIUM_LARGE),
-                                PlayTrailerAndRateMovieView(),
+    return ChangeNotifierProvider.value(
+        value: MovieDetailsBloc(movieId),
+        child: Scaffold(
+          body: Consumer<MovieDetailsBloc>(
+            builder: (BuildContext context, value, Widget? child) {
+              return (value.mMovie != null)
+                  ? Container(
+                      color: SCREEN_BODY_BACKGROUND_COLOR,
+                      child: CustomScrollView(
+                        slivers: [
+                          SliverAppBar(
+                            automaticallyImplyLeading: false,
+                            collapsedHeight: SLIVER_APP_BAR_COLLAPSED_HEIGHT,
+                            expandedHeight: SLIVER_APP_BAR_EXPANDED_HEIGHT,
+                            backgroundColor: PRIMARY_COLOR,
+                            flexibleSpace: MovieDetailsScreenSectionView(() {
+                              Navigator.pop(context);
+                            }, value.mMovie),
+                          ),
+                          SliverList(
+                            delegate: SliverChildListDelegate(
+                              [
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      left: MARGIN_MEDIUM_LARGE,
+                                      bottom: MARGIN_MEDIUM_XLARGE),
+                                  child: Column(
+                                    children: [
+                                      MovieTimeAndGenreView(value.mMovie),
+                                      SizedBox(height: MARGIN_MEDIUM_XLARGE),
+                                      StorylineSectionView(value.mMovie),
+                                      SizedBox(height: MARGIN_MEDIUM_LARGE),
+                                      PlayTrailerAndRateMovieView(),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.all(MARGIN_MEDIUM_LARGE),
+                                  child: AboutFilmSectionView(value.mMovie),
+                                ),
+                                (value.mCreatorsLists != null)
+                                    ? ActorsAndCreatorsView(
+                                        MOVIE_DETAILS_CREATORS,
+                                        MOVIE_DETAILS_MORE_CREATORS,
+                                        mActorList: value.mCreatorsLists,
+                                      )
+                                    : Container(),
                               ],
                             ),
                           ),
-                          ActorsAndCreatorsView(
-                            MOVIE_DETAILS_ACTORS,
-                            "",
-                            mActorList: this.mActorLists,
-                            showMoreTextVisility: false,
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(MARGIN_MEDIUM_LARGE),
-                            child: AboutFilmSectionView(mMovie),
-                          ),
-
-                          /// in some movie api, creator name and profilePath not have
-                          mCreatorsLists != null && mCreatorsLists!.isNotEmpty
-                              ? ActorsAndCreatorsView(
-                                  MOVIE_DETAILS_CREATORS,
-                                  MOVIE_DETAILS_MORE_CREATORS,
-                                  mActorList: this.mCreatorsLists,
-                                )
-                              : Container(),
                         ],
-                      ),
-                    ),
-                  ],
-                )),
-          )
-        : Center(
-            child: CircularProgressIndicator(),
-          );
+                      ))
+                  : Center(
+                      child: CircularProgressIndicator(),
+                    );
+            },
+          ),
+        ));
   }
 }
 
@@ -152,26 +89,16 @@ class AboutFilmSectionView extends StatelessWidget {
       children: [
         TitleText("ABOUT FILM"),
         SizedBox(height: MARGIN_MEDIUM_2),
-        mMovie?.originalTitle != null
-            ? AboutFilm("Original Title:", mMovie!.originalTitle.toString())
-            : CircularProgressIndicator(),
+        AboutFilm("Original Title:", mMovie!.originalTitle.toString()),
         SizedBox(height: MARGIN_MEDIUM_2),
-        mMovie?.genres != null
-            ? AboutFilm("Type:", mMovie!.genres!.map((e) => e.name).join(","))
-            : Container(),
+        AboutFilm("Type:", mMovie!.genres!.map((e) => e.name).join(",")),
         SizedBox(height: MARGIN_MEDIUM_2),
-        mMovie?.productionCountries != null
-            ? AboutFilm("Production:",
-                mMovie!.productionCountries!.map((e) => e.name).join(","))
-            : Container(),
+        AboutFilm("Production:",
+            mMovie!.productionCountries!.map((e) => e.name).join(",")),
         SizedBox(height: MARGIN_MEDIUM_2),
-        mMovie?.releaseDate != null
-            ? AboutFilm("Premiere:", mMovie!.releaseDate.toString())
-            : CircularProgressIndicator(),
+        AboutFilm("Premiere:", mMovie!.releaseDate.toString()),
         SizedBox(height: MARGIN_MEDIUM_2),
-        mMovie?.overview != null
-            ? AboutFilm("Description:", mMovie!.overview.toString())
-            : CircularProgressIndicator(),
+        AboutFilm("Description:", mMovie!.overview.toString()),
       ],
     );
   }
@@ -292,10 +219,13 @@ class StorylineSectionView extends StatelessWidget {
       children: [
         TitleText(MOVIE_DETAILS_STORYLINE),
         SizedBox(height: MARGIN_MEDIUM),
-        Text(
-          mMovie!.overview.toString(),
-          style: TextStyle(color: Colors.white, fontSize: MARGIN_MEDIUM_2),
-        )
+        (mMovie != null)
+            ? Text(
+                mMovie!.overview.toString(),
+                style:
+                    TextStyle(color: Colors.white, fontSize: MARGIN_MEDIUM_2),
+              )
+            : Container(),
       ],
     );
   }
@@ -314,38 +244,8 @@ class MovieTimeAndGenreView extends StatelessWidget {
       direction: Axis.horizontal,
       children: _createMovieTimeAndGenreWidget(),
     );
-
-    //cause of overflow , modified again wiht Wrap for chips
-    // return Row(
-    //   children: [
-    //     Icon(Icons.access_time, color: PLAY_BUTTON_COLOR),
-    //     SizedBox(width: MARGIN_SMALL),
-    //     Text(
-    //       "2h 13min",
-    //       style: TextStyle(
-    //           color: Colors.white,
-    //           fontWeight: FontWeight.bold,
-    //           fontSize: TEXT_REGULAR_2X),
-    //     ),
-    //     SizedBox(width: MARGIN_MEDIUM),
-    //     Row(
-    //       children:mMovie!.genres!.map((e) => GenreChipView(e.name)).toList() ,
-    //       // genreList.map((genre) => GenreChipView(genre)).toList(),
-    //     ),
-    //     Spacer(),
-    //     Padding(
-    //       padding: const EdgeInsets.only(right: MARGIN_MEDIUM),
-    //       child: Icon(
-    //         Icons.favorite_border,
-    //         color: Colors.white,
-    //         size: FAVORITE_ICON_SIZE,
-    //       ),
-    //     ),
-    //   ],
-    // );
   }
 
-  /// 1.to solve chip's view overflow , 2.flutter is running with ,so view widgets can use as list
   List<Widget> _createMovieTimeAndGenreWidget() {
     List<Widget> widgets = [
       Icon(Icons.access_time, color: PLAY_BUTTON_COLOR),
@@ -407,7 +307,9 @@ class MovieDetailsScreenSectionView extends StatelessWidget {
     return Stack(
       children: [
         Positioned.fill(
-          child: MovieDetailsBackgroundImageView(mMovie!.posterPath.toString()),
+          child: (mMovie != null)
+              ? MovieDetailsBackgroundImageView(mMovie!.posterPath.toString())
+              : Container(),
         ),
         Positioned.fill(
           child: GradientView(),
@@ -465,8 +367,10 @@ class MovieDetailsYearAndVotesView extends StatelessWidget {
                 borderRadius:
                     BorderRadius.circular(MOVIE_DETAILS_PLAY_BUTTON_HEIGHT_2),
               ),
-              child: MovieDeatilsYearButtonView(
-                  mMovie!.releaseDate!.substring(0, 4)),
+              child: (mMovie != null)
+                  ? MovieDeatilsYearButtonView(
+                      mMovie!.releaseDate!.substring(0, 4))
+                  : Container(),
             ),
             Spacer(),
             Row(
@@ -475,21 +379,28 @@ class MovieDetailsYearAndVotesView extends StatelessWidget {
                   children: [
                     SizedBox(height: MARGIN_MEDIUM),
                     MovieRatingBar(),
-                    TitleText("${mMovie!.voteCount} VOTES"),
+                    (mMovie != null)
+                        ? TitleText("${mMovie!.voteCount} VOTES")
+                        : Container(),
                   ],
                 ),
                 SizedBox(width: MARGIN_MEDIUM),
-                Text(
-                  mMovie!.voteAverage.toString(),
-                  style: TextStyle(
-                      color: Colors.white, fontSize: MOVIE_DETAILS_RATING_TEXT),
-                ),
+                (mMovie != null)
+                    ? Text(
+                        mMovie!.voteAverage.toString(),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: MOVIE_DETAILS_RATING_TEXT),
+                      )
+                    : Container(),
               ],
             ),
           ],
         ),
         SizedBox(height: MARGIN_MEDIUM),
-        MovieDetailsTitleTextView(mMovie!.title.toString()),
+        (mMovie != null)
+            ? MovieDetailsTitleTextView(mMovie!.title.toString())
+            : Container(),
       ],
     );
   }

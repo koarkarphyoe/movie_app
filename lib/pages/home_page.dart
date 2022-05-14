@@ -1,8 +1,6 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:movie_app/data.vos/models/movie_model.dart';
-import 'package:movie_app/data.vos/models/movie_model_impl.dart';
-import 'package:movie_app/data.vos/vos/actor_vo.dart';
+import 'package:movie_app/bloc/home_bloc.dart';
 import 'package:movie_app/data.vos/vos/genre_vo.dart';
 import 'package:movie_app/data.vos/vos/movie_vo.dart';
 import 'package:movie_app/resources/colors.dart';
@@ -15,226 +13,94 @@ import 'package:movie_app/widgets/actors_and_creators_view.dart';
 import 'package:movie_app/widgets/more_show_cases_text.dart';
 import 'package:movie_app/widgets/title_text.dart';
 import 'package:movie_app/widgets/title_text_with_more_show_cases.dart';
+import 'package:provider/provider.dart';
 
 import 'movie_details_app_bar_view.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  /// Create Object for Model Components
-  MovieModel mModel = MovieModelImpl();
-
-  List<MovieVO>? mNowPlayingMovieList;
-  List<ActorVO>? mActorList;
-  List<MovieVO>? mPopularMovieList;
-  List<MovieVO>? topRated;
-
-  ///for Genres title and movie list
-  List<GenreVO>? mGenreList;
-  List<MovieVO>? mMovieByGenre;
-
-  ///nulll
-  // int? a;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // print(a! + 1);
-
-    //now playing from Network
-    // mModel.getNowPlayingMovies(1)!.then((nowMovie) {
-    //   setState(() {
-    //     mNowPlayingMovieList = nowMovie;
-    //   });
-    // }).catchError((error) {
-    //   debugPrint("Error => ${error.toString()}");
-    // });
-
-    //now playing from Database
-
-    mModel.getNowPlayingMoviesFromDatabase()!.listen((value) {
-      setState(() {
-        mNowPlayingMovieList = value;
-      });
-    }).onError((error) {
-      debugPrint("Error is ${error.toString()}");
-    });
-
-    //BestPopular from Network
-    // mModel.getPopularMovies(1)!.then((value) {
-    //   setState(() {
-    //     mResults = value;
-    //   });
-    // }).catchError((error) {
-    //   debugPrint(error.toString());
-    // });
-
-    //BestPopular from Database
-    mModel.getPopularMoviesFromDatabase()!.listen((value) {
-      setState(() {
-        mPopularMovieList = value;
-        // print("Popular movie lengtn => ${mPopularMovieList?.length.toInt()}");
-      });
-    }).onError((error) {
-      debugPrint(error.toString());
-    });
-
-    // Actor from Network
-    // mModel.getActors(1)!.then((actor) {
-    //   setState(() {
-    //     mActorList = actor;
-    //   });
-    // }).catchError((error) {
-    //   debugPrint("Error ---> ${error.toString()}");
-    // });
-
-    // Actor from DataBase
-    mModel.getActorsFromDatabase()!.listen((actor) {
-      setState(() {
-        mActorList = actor;
-      });
-    }).onError((error) {
-      debugPrint("Error ---> ${error.toString()}");
-    });
-
-    //For ShowCase from network
-    // mModel
-    //     .getTopRated(1)!
-    //     .then((value) => {
-    //           setState(() {
-    //             topRated = value;
-    //           })
-    //         })
-    //     .catchError((error) {
-    //   debugPrint("Error====>${error.toString()}");
-    // });
-
-    //For ShowCase from database
-    mModel
-        .getTopRatedFromDatabase()!
-        .listen((value) => {
-              setState(() {
-                topRated = value;
-              })
-            })
-        .onError((error) {
-      debugPrint("Error====>${error.toString()}");
-    });
-
-    ///Genres from Network
-    // mModel
-    //     .getGenres()!
-    //     .then((value) => {
-    //           setState(() {
-    //             mGenreList = value;
-
-    //             ///Movies by Genres
-    //             _getMoviesGenreAndRefresh(mGenreList!.first.id);
-    //           })
-    //         })
-    //     .catchError((error) {
-    //   debugPrint("Error =====> ${error.toString()}");
-    // });
-
-    ///Genres from database
-    mModel
-        .getGenresFromDatabase()!
-        .listen((value) => {
-              setState(() {
-                mGenreList = value;
-                if (mGenreList!.isNotEmpty) {
-                  ///Movies by Genres
-                  _getMoviesGenreAndRefresh(mGenreList!.first.id);
-                } else {
-                  [];
-                }
-              })
-            })
-        .onError((error) {
-      debugPrint("getGenresFromDatabase Error is -> ${error.toString()}");
-    });
-  }
-
-  void _getMoviesGenreAndRefresh(int genreId) {
-    // mModel
-    //     .getMovieByGenre(genreId)
-    //     .then((value) => {
-    //           setState(() {
-    //             mMovieByGenre = value;
-    //           })
-    //         })
-    //     .catchError((error) {
-    //   debugPrint(error.toString());
-    // });
-
-    mModel.getMovieListByGenreFromDatabase(genreId).listen((event) {
-      setState(() {
-        mMovieByGenre = event;
-      });
-    }).onError((error) {
-      debugPrint(error.toString());
-    });
-  }
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: PRIMARY_COLOR,
-        title: Text(
-          MAIN_SCREEN_APP_BAR_TITLE,
-          style: TextStyle(fontWeight: FontWeight.w700),
-        ),
-        leading: Icon(Icons.menu),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(
-                left: 0, top: 0, right: MARGIN_MEDIUM_2, bottom: 0),
-            child: Icon(Icons.search),
+    return ChangeNotifierProvider(
+      create: (BuildContext context) => HomeBloc(),
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: PRIMARY_COLOR,
+          title: Text(
+            MAIN_SCREEN_APP_BAR_TITLE,
+            style: TextStyle(fontWeight: FontWeight.w700),
           ),
-        ],
-      ),
-      body: Container(
-        color: SCREEN_BODY_BACKGROUND_COLOR,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ///Need to care banner count! => mResults?.take(8).toList()
-              BannerSectionView(
-                mPopularMovieList: mNowPlayingMovieList?.take(8).toList(),
-              ),
-              SizedBox(height: MARGIN_MEDIUM),
-              BestPopularMoviesAndSerialsSectionView(
-                (movieId) => _navigateToMovieDetailsPage(context, movieId),
-                mPopularMovieList,
-              ),
-              SizedBox(height: MARGIN_MEDIUM),
-              MovieShowtimesSectionView(),
-              SizedBox(height: MARGIN_MEDIUM),
-              GenreSectionView(
-                (movieId) => _navigateToMovieDetailsPage(context, movieId),
-                mGenreList,
-                mMovieByGenre,
-                onTapGenre: (int genreId) {
-                  _getMoviesGenreAndRefresh(genreId);
-                },
-              ),
-              SizedBox(height: MARGIN_MEDIUM),
-              ShowCasesSectionView(topRated),
-              SizedBox(height: MARGIN_MEDIUM_XLARGE),
-              ActorsAndCreatorsView(
-                BEST_ACTORS_TEXT,
-                MORE_ACTORS_TEXT,
-                mActorList: this.mActorList,
-              ),
-              SizedBox(height: MARGIN_MEDIUM),
-            ],
+          leading: Icon(Icons.menu),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 0, top: 0, right: MARGIN_MEDIUM_2, bottom: 0),
+              child: Icon(Icons.search),
+            ),
+          ],
+        ),
+        body: Container(
+          color: SCREEN_BODY_BACKGROUND_COLOR,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ///Need to care banner count! => mResults?.take(8).toList()
+                Consumer<HomeBloc>(
+                  builder: (BuildContext context, bloc, Widget? child) {
+                    return BannerSectionView(
+                      mPopularMovieList:
+                          bloc.mNowPlayingMovieList?.take(8).toList(),
+                    );
+                  },
+                ),
+                SizedBox(height: MARGIN_MEDIUM),
+                Consumer<HomeBloc>(
+                  builder: (BuildContext context, value, Widget? child) {
+                    return BestPopularMoviesAndSerialsSectionView(
+                      (movieId) =>
+                          _navigateToMovieDetailsPage(context, movieId),
+                      value.mPopularMovieList,
+                    );
+                  },
+                ),
+                SizedBox(height: MARGIN_MEDIUM),
+                MovieShowtimesSectionView(),
+                SizedBox(height: MARGIN_MEDIUM),
+                Consumer<HomeBloc>(
+                  builder: (BuildContext context, value, Widget? child) {
+                    return GenreSectionView(
+                      (movieId) =>
+                          _navigateToMovieDetailsPage(context, movieId),
+                      value.mGenreList,
+                      value.mMovieByGenre,
+                      onTapGenre: (int genreId) {
+                        value.onTapGenre(genreId);
+                      },
+                    );
+                  },
+                ),
+                SizedBox(height: MARGIN_MEDIUM),
+                Consumer<HomeBloc>(
+                  builder: (BuildContext context, value, Widget? child) {
+                    return ShowCasesSectionView(value.topRated);
+                  },
+                ),
+                SizedBox(height: MARGIN_MEDIUM_XLARGE),
+                Consumer<HomeBloc>(
+                  builder: (BuildContext context, value, Widget? child) {
+                    return ActorsAndCreatorsView(
+                      BEST_ACTORS_TEXT,
+                      MORE_ACTORS_TEXT,
+                      mActorList: value.mActorList,
+                    );
+                  },
+                ),
+                SizedBox(height: MARGIN_MEDIUM),
+              ],
+            ),
           ),
         ),
       ),

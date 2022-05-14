@@ -24,8 +24,8 @@ class CreditsDao {
   Stream<List<CreditVO>> getAllCreditsListStream() {
     return getCreditsBox()
         .watch()
-        .map((event) => getAllCredits())
-        .startWith(getAllCredits());
+        .map((event) => getAllCredits().where((element) => element.isCreator()).toList())
+        .startWith(getAllCredits().where((element) => element.isCreator()).toList());
   }
 
   Box<CreditVO> getCreditsBox() {
