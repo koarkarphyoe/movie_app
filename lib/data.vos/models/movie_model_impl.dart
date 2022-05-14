@@ -96,7 +96,12 @@ class MovieModelImpl extends MovieModel {
   @override
   void getCreditsByMovie(int movieId) {
     mDataAgent.getCreditsByMovie(movieId).then((value) async {
-      mCreditDao.saveAllCredits(value);
+      List<CreditVO> creditMap = value.map((e) {
+        e.movieId = movieId;
+        return e;
+      }).toList();
+      print("MovieID in getCreditsByMovie ==>${movieId.toString()}");
+      mCreditDao.saveAllCredits(creditMap, movieId);
     });
   }
 
@@ -147,7 +152,7 @@ class MovieModelImpl extends MovieModel {
   @override
   Stream<List<CreditVO>?>? getCreditsFromDatabase(int movieId) {
     getCreditsByMovie(movieId);
-    return mCreditDao.getAllCreditsListStream();
+    return mCreditDao.getAllCreditsListStream(movieId);
   }
 
   @override

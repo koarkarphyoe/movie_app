@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import '../data.vos/models/movie_model.dart';
 import '../data.vos/models/movie_model_impl.dart';
 import '../data.vos/vos/credit_vo.dart';
@@ -7,11 +6,12 @@ import '../data.vos/vos/movie_vo.dart';
 
 class MovieDetailsBloc {
   //Reactive Stream
-  StreamController<MovieVO?> mMovieStreamController = StreamController();
+  StreamController<MovieVO?> mMovieStreamController =
+      StreamController.broadcast();
   StreamController<List<CreditVO>?> mActorListsStreamController =
-      StreamController();
+      StreamController.broadcast();
   StreamController<List<CreditVO>?> mCreatorsListsController =
-      StreamController();
+      StreamController.broadcast();
 
   //Model
   MovieModel mModel = MovieModelImpl();

@@ -56,6 +56,9 @@ class CreditVO extends BaseVO {
   @HiveField(11)
   int? order;
 
+  @HiveField(12)
+  int? movieId;
+
   CreditVO(
       this.adult,
       this.gender,
@@ -68,7 +71,8 @@ class CreditVO extends BaseVO {
       this.castId,
       this.character,
       this.creditId,
-      this.order)
+      this.order,
+      this.movieId)
       : super(name, profilePath);
 
   factory CreditVO.fromJson(Map<String, dynamic> json) =>

@@ -10,7 +10,6 @@ import 'package:movie_app/widgets/actors_and_creators_view.dart';
 import 'package:movie_app/widgets/gradient_view.dart';
 import 'package:movie_app/widgets/movie_rating_bar.dart';
 import 'package:movie_app/widgets/title_text.dart';
-
 import '../bloc/movie_details_bloc.dart';
 
 class MovieDetailsPage extends StatefulWidget {
@@ -29,11 +28,11 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    _bloc.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _bloc.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -90,21 +89,18 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                                 child: AboutFilmSectionView(snapshot.data),
                               ),
                               StreamBuilder(
-                                stream: _bloc.mCreatorsListsController.stream,
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<List<CreditVO>?> snapshot) {
-                                  if (snapshot.hasData &&
-                                      snapshot.data!.isNotEmpty) {
-                                    return ActorsAndCreatorsView(
-                                      MOVIE_DETAILS_CREATORS,
-                                      MOVIE_DETAILS_MORE_CREATORS,
-                                      mActorList: snapshot.data,
-                                    );
-                                  } else {
-                                    return Container();
-                                  }
-                                },
-                              )
+                                  stream: _bloc.mCreatorsListsController.stream,
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<List<CreditVO>?> snapshot) {
+                                    return (snapshot.hasData &&
+                                            snapshot.data!.isNotEmpty)
+                                        ? ActorsAndCreatorsView(
+                                            MOVIE_DETAILS_CREATORS,
+                                            MOVIE_DETAILS_MORE_CREATORS,
+                                            mActorList: snapshot.data,
+                                          )
+                                        : Container();
+                                  }),
                             ],
                           ),
                         ),

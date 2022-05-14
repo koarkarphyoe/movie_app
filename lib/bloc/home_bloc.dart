@@ -8,17 +8,17 @@ import '../data.vos/vos/movie_vo.dart';
 class HomeBloc {
 //Reactive Stream
   StreamController<List<MovieVO>?> mNowPlayingMovieListStreamController =
-      StreamController();
+      StreamController.broadcast();
   StreamController<List<ActorVO>?> mActorListStreamController =
-      StreamController();
+      StreamController.broadcast();
   StreamController<List<MovieVO>?> mPopularMovieListStreamController =
-      StreamController();
+      StreamController.broadcast();
   StreamController<List<MovieVO>?> topRatedStreamController =
-      StreamController();
+      StreamController.broadcast();
   StreamController<List<GenreVO>?> mGenreListStreamController =
-      StreamController();
+      StreamController.broadcast();
   StreamController<List<MovieVO>?> mMovieByGenreStreamController =
-      StreamController();
+      StreamController.broadcast();
 
   //Model
   MovieModel mMovieModel = MovieModelImpl();
@@ -44,7 +44,11 @@ class HomeBloc {
 
     mMovieModel.getGenresFromDatabase()?.listen((event) {
       mGenreListStreamController.sink.add(event);
-      getMoviesGenreAndRefresh(event!.first.id);
+      if (event != null && event.isNotEmpty) {
+        getMoviesGenreAndRefresh(event.first.id);
+      } else {
+        [];
+      }
     }).onError((error) {});
   }
 
