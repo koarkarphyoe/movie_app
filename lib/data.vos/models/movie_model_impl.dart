@@ -4,6 +4,7 @@ import 'package:movie_app/data.vos/vos/credit_vo.dart';
 import 'package:movie_app/data.vos/vos/genre_vo.dart';
 import 'package:movie_app/data.vos/vos/movie_vo.dart';
 import 'package:movie_app/network/movie_data_agent.dart';
+import 'package:movie_app/network/responses/get_credits_by_movie_response.dart';
 import 'package:movie_app/network/retrofit_data_agent_impl.dart';
 import 'package:movie_app/persistence/daos/daos/actor_dao.dart';
 import 'package:movie_app/persistence/daos/daos/credits_dao.dart';
@@ -125,12 +126,12 @@ class MovieModelImpl extends MovieModel {
   // }
 
   //After migrate to Reactive Programming
-    @override
+  @override
   void getMovieByGenre(int genreId) {
-     mDataAgent.getMovieByGenres(genreId).then((value) {
+    mDataAgent.getMovieByGenres(genreId).then((value) {
       List<MovieVO> mTopRated = value.map((e) {
         e.genreId = genreId;
-        print(e.genreId.toString());
+        // print(e.genreId.toString());
         return e;
       }).toList();
       movieByGenresDao.saveMovieListByGenreId(mTopRated, genreId);
@@ -138,9 +139,17 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  void getCreditsByMovie(int movieId) {
-    mDataAgent.getCreditsByMovie(movieId).then((value) async {
-      mCreditDao.saveAllCredits(value);
+  Future<List<CreditVO>> getCreditsByMovie(int movieId) {
+    return mDataAgent.getCreditsByMovie(movieId).then((value) async {
+      // print("MovieId is ==> ${movieId.toString()}");
+      // print("First Credit id is ==> ${value.first.id.toString()}");
+      List<CreditVO> creditMap = value.map((e) {
+        e.movieId = movieId;
+        return e;
+      }).toList();
+
+      mCreditDao.saveAllCredits(creditMap, movieId);
+      return Future.value(value);
     });
   }
 
@@ -199,7 +208,7 @@ class MovieModelImpl extends MovieModel {
   @override
   Stream<List<CreditVO>?>? getCreditsFromDatabase(int movieId) {
     getCreditsByMovie(movieId);
-    return mCreditDao.getAllCreditsListStream();
+    return mCreditDao.getAllCreditsListStream(movieId);
   }
 
   @override

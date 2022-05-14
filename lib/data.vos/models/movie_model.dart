@@ -2,6 +2,7 @@ import 'package:movie_app/data.vos/vos/actor_vo.dart';
 import 'package:movie_app/data.vos/vos/credit_vo.dart';
 import 'package:movie_app/data.vos/vos/genre_vo.dart';
 import 'package:movie_app/data.vos/vos/movie_vo.dart';
+import 'package:movie_app/network/responses/get_credits_by_movie_response.dart';
 
 abstract class MovieModel {
   //Network
@@ -16,7 +17,7 @@ abstract class MovieModel {
   // Future<List<MovieVO>> getMovieByGenre(int genreId);//Before migrate to Reactive Programming
   void getMovieByGenre(int genreId);//After migrate to Reactive Programming
   void getGenres();
-  void getCreditsByMovie(int movieId);
+  Future<List<CreditVO>> getCreditsByMovie(int movieId);
   void getMovieDetails(int movieId);
 
   //Database

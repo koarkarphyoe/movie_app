@@ -42,11 +42,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
 
     //From database
     //  print('detail page');
-    mModel
-        .getMovieDetailsFromDatabase(
-      widget.movieId,
-    )
-        .listen((value) {
+    mModel.getMovieDetailsFromDatabase(widget.movieId).listen((value) {
       // print('detail $value');
       if (mounted) {
         setState(() {
@@ -58,7 +54,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     ///for actor and creator
     // mModel.getCreditsByMovie(widget.movieId)!.then((value) {
     //   setState(() {
-    //     mActorLists = value!.where((element) => element.isActor()).toList();
+    //     mActorLists = value.where((element) => element.isActor()).toList();
     //     mCreatorsLists = value.where((element) => element.isCreator()).toList();
     //   });
     // });
@@ -72,6 +68,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
         });
       }
     });
+   
   }
 
   @override
@@ -80,7 +77,6 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
         ? Scaffold(
             body: Container(
                 color: SCREEN_BODY_BACKGROUND_COLOR,
-
                 ///if mMovie not null will load data in customscrollview , if not circular loading bar will load
                 child: CustomScrollView(
                   slivers: [

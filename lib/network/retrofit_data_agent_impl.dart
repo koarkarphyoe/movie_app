@@ -5,6 +5,7 @@ import 'package:movie_app/data.vos/vos/credit_vo.dart';
 import 'package:movie_app/data.vos/vos/genre_vo.dart';
 import 'package:movie_app/data.vos/vos/movie_vo.dart';
 import 'package:movie_app/network/api_constants.dart';
+import 'package:movie_app/network/responses/get_credits_by_movie_response.dart';
 import 'package:movie_app/network/retrofit_the_movie_api.dart';
 
 import 'movie_data_agent.dart';
@@ -90,8 +91,9 @@ class RetrofitDataAgentImpl extends MovieDataAgent {
         .getCreditsByMovie(
             movieId.toString(), apiKey, languageENUS, 1.toString())
         .asStream()
-        .map((event) => event.cast)
-        .first;
+        .map((event) {
+      return event.cast;
+    }).first;
   }
 
   @override
