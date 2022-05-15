@@ -10,22 +10,26 @@ class CreditsDao {
   }
   CreditsDao._internal();
 
-  void saveAllCredits(List<CreditVO> mCredits) async {
+  void saveAllCredits(List<CreditVO> mCredits,int movieId) async {
     Map<int, CreditVO> creditMap = Map.fromIterable(mCredits,
         key: (credit) => credit.id, value: (credit) => credit);
     await getCreditsBox().putAll(creditMap);
   }
 
-  List<CreditVO> getAllCredits() {
+  List<CreditVO> getAllCredits(int movieId) {
     return getCreditsBox().values.toList();
   }
 
   //Reactive Programming
-  Stream<List<CreditVO>> getAllCreditsListStream() {
+  Stream<List<CreditVO>> getAllCreditsListStream(int movieId) {
     return getCreditsBox()
         .watch()
-        .map((event) => getAllCredits().where((element) => element.isCreator()).toList())
-        .startWith(getAllCredits().where((element) => element.isCreator()).toList());
+        .map((event) => getAllCredits(movieId)
+            .where((element) => element.movieId == movieId)
+            .toList())
+        .startWith(getAllCredits(movieId)
+            .where((element) => element.movieId == movieId)
+            .toList());
   }
 
   Box<CreditVO> getCreditsBox() {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/widgets/title_text.dart';
-
 import 'more_show_cases_text.dart';
 
 class TitleTextWithMoreShowCases extends StatelessWidget {

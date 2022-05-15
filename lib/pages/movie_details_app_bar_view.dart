@@ -53,11 +53,17 @@ class MovieDetailsPage extends StatelessWidget {
                                     ],
                                   ),
                                 ),
+                                ActorsAndCreatorsView(
+                                  MOVIE_DETAILS_ACTORS,
+                                  MOVIE_DETAILS_MORE_CREATORS,
+                                  showMoreTextVisility: false,
+                                  mActorList: value.mActorLists,
+                                ),
                                 Container(
                                   padding: EdgeInsets.all(MARGIN_MEDIUM_LARGE),
                                   child: AboutFilmSectionView(value.mMovie),
                                 ),
-                                (value.mCreatorsLists != null)
+                                (value.mCreatorsLists != null&&value.mCreatorsLists!.isNotEmpty)
                                     ? ActorsAndCreatorsView(
                                         MOVIE_DETAILS_CREATORS,
                                         MOVIE_DETAILS_MORE_CREATORS,
