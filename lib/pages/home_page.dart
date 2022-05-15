@@ -1,6 +1,7 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/bloc/home_bloc.dart';
+import 'package:movie_app/data.vos/vos/actor_vo.dart';
 import 'package:movie_app/data.vos/vos/genre_vo.dart';
 import 'package:movie_app/data.vos/vos/movie_vo.dart';
 import 'package:movie_app/resources/colors.dart';
@@ -41,50 +42,86 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
-        body: Consumer<HomeBloc>(
-          builder: (BuildContext context, value, Widget? child) {
-            return Container(
-              color: SCREEN_BODY_BACKGROUND_COLOR,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    BannerSectionView(
-                      mPopularMovieList:
-                          value.mNowPlayingMovieList?.take(8).toList(),
-                    ),
-                    SizedBox(height: MARGIN_MEDIUM),
-                    BestPopularMoviesAndSerialsSectionView(
+        body: Container(
+          color: SCREEN_BODY_BACKGROUND_COLOR,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Selector<HomeBloc, List<MovieVO>?>(
+                  selector: (BuildContext context, bloc) =>
+                      bloc.mNowPlayingMovieList,
+                  builder:
+                      (BuildContext context, nowPlayingMovie, Widget? child) {
+                    return BannerSectionView(
+                      mPopularMovieList: nowPlayingMovie?.take(8).toList(),
+                    );
+                  },
+                ),
+                SizedBox(height: MARGIN_MEDIUM),
+                Selector<HomeBloc, List<MovieVO>?>(
+                  selector: (BuildContext context, homeBloc) {
+                    return homeBloc.mPopularMovieList;
+                  },
+                  builder: (BuildContext context, popularMovie, Widget? child) {
+                    return BestPopularMoviesAndSerialsSectionView(
                       (movieId) =>
                           _navigateToMovieDetailsPage(context, movieId),
-                      value.mPopularMovieList,
-                    ),
-                    SizedBox(height: MARGIN_MEDIUM),
-                    MovieShowtimesSectionView(),
-                    SizedBox(height: MARGIN_MEDIUM),
-                    GenreSectionView(
-                      (movieId) =>
-                          _navigateToMovieDetailsPage(context, movieId),
-                      value.mGenreList,
-                      value.mMovieByGenre,
-                      onTapGenre: (int genreId) {
-                        value.onTapGenre(genreId);
+                      popularMovie,
+                    );
+                  },
+                ),
+                SizedBox(height: MARGIN_MEDIUM),
+                MovieShowtimesSectionView(),
+                SizedBox(height: MARGIN_MEDIUM),
+                Selector<HomeBloc, List<GenreVO>?>(
+                  selector: (BuildContext context, homeBloc) =>
+                      homeBloc.mGenreList,
+                  builder: (BuildContext context, genreList, Widget? child) {
+                    return Selector<HomeBloc, List<MovieVO>?>(
+                      selector: (BuildContext context, homeBloc) =>
+                          homeBloc.mMovieByGenre,
+                      builder: (BuildContext context, movieByGenrelist,
+                          Widget? child) {
+                        return GenreSectionView(
+                          (movieId) =>
+                              _navigateToMovieDetailsPage(context, movieId),
+                          genreList,
+                          movieByGenrelist,
+                          onTapGenre: (int genreId) {
+                            HomeBloc homeBloc =
+                                Provider.of(context, listen: false);
+                            homeBloc.onTapGenre(genreId);
+                          },
+                        );
                       },
-                    ),
-                    SizedBox(height: MARGIN_MEDIUM),
-                    ShowCasesSectionView(value.topRated),
-                    SizedBox(height: MARGIN_MEDIUM_XLARGE),
-                    ActorsAndCreatorsView(
+                    );
+                  },
+                ),
+                SizedBox(height: MARGIN_MEDIUM),
+                Selector<HomeBloc, List<MovieVO>?>(
+                  selector: (BuildContext context, homeBloc) =>
+                      homeBloc.topRated,
+                  builder: (BuildContext context, topRated, Widget? child) {
+                    return ShowCasesSectionView(topRated);
+                  },
+                ),
+                SizedBox(height: MARGIN_MEDIUM_XLARGE),
+                Selector<HomeBloc, List<ActorVO>?>(
+                  selector: (BuildContext context, homeBloc) =>
+                      homeBloc.mActorList,
+                  builder: (BuildContext context, actorList, Widget? child) {
+                    return ActorsAndCreatorsView(
                       BEST_ACTORS_TEXT,
                       MORE_ACTORS_TEXT,
-                      mActorList: value.mActorList,
-                    ),
-                    SizedBox(height: MARGIN_MEDIUM),
-                  ],
+                      mActorList: actorList,
+                    );
+                  },
                 ),
-              ),
-            );
-          },
+                SizedBox(height: MARGIN_MEDIUM),
+              ],
+            ),
+          ),
         ),
       ),
     );

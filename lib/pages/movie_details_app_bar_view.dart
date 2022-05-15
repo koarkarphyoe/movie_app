@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/bloc/movie_details_bloc.dart';
+import 'package:movie_app/data.vos/vos/credit_vo.dart';
 import 'package:movie_app/data.vos/vos/movie_vo.dart';
 import 'package:movie_app/network/api_constants.dart';
 import 'package:movie_app/resources/colors.dart';
@@ -20,9 +21,11 @@ class MovieDetailsPage extends StatelessWidget {
     return ChangeNotifierProvider.value(
         value: MovieDetailsBloc(movieId),
         child: Scaffold(
-          body: Consumer<MovieDetailsBloc>(
-            builder: (BuildContext context, value, Widget? child) {
-              return (value.mMovie != null)
+          body: Selector<MovieDetailsBloc, MovieVO?>(
+            selector: (BuildContext context, movieDetailsBloc) =>
+                movieDetailsBloc.mMovie,
+            builder: (BuildContext context, mMovie, Widget? child) {
+              return (mMovie != null)
                   ? Container(
                       color: SCREEN_BODY_BACKGROUND_COLOR,
                       child: CustomScrollView(
@@ -34,7 +37,7 @@ class MovieDetailsPage extends StatelessWidget {
                             backgroundColor: PRIMARY_COLOR,
                             flexibleSpace: MovieDetailsScreenSectionView(() {
                               Navigator.pop(context);
-                            }, value.mMovie),
+                            }, mMovie),
                           ),
                           SliverList(
                             delegate: SliverChildListDelegate(
@@ -45,32 +48,48 @@ class MovieDetailsPage extends StatelessWidget {
                                       bottom: MARGIN_MEDIUM_XLARGE),
                                   child: Column(
                                     children: [
-                                      MovieTimeAndGenreView(value.mMovie),
+                                      MovieTimeAndGenreView(mMovie),
                                       SizedBox(height: MARGIN_MEDIUM_XLARGE),
-                                      StorylineSectionView(value.mMovie),
+                                      StorylineSectionView(mMovie),
                                       SizedBox(height: MARGIN_MEDIUM_LARGE),
                                       PlayTrailerAndRateMovieView(),
                                     ],
                                   ),
                                 ),
-                                ActorsAndCreatorsView(
-                                  MOVIE_DETAILS_ACTORS,
-                                  MOVIE_DETAILS_MORE_CREATORS,
-                                  showMoreTextVisility: false,
-                                  mActorList: value.mActorLists,
+                                Selector<MovieDetailsBloc, List<CreditVO>?>(
+                                  selector: (BuildContext context,
+                                          movieDetailsBloc) =>
+                                      movieDetailsBloc.mActorLists,
+                                  builder: (BuildContext context, mActorLists,
+                                      Widget? child) {
+                                    return ActorsAndCreatorsView(
+                                      MOVIE_DETAILS_ACTORS,
+                                      MOVIE_DETAILS_MORE_CREATORS,
+                                      showMoreTextVisility: false,
+                                      mActorList: mActorLists,
+                                    );
+                                  },
                                 ),
                                 Container(
                                   padding: EdgeInsets.all(MARGIN_MEDIUM_LARGE),
-                                  child: AboutFilmSectionView(value.mMovie),
+                                  child: AboutFilmSectionView(mMovie),
                                 ),
-                                (value.mCreatorsLists != null &&
-                                        value.mCreatorsLists!.isNotEmpty)
-                                    ? ActorsAndCreatorsView(
-                                        MOVIE_DETAILS_CREATORS,
-                                        MOVIE_DETAILS_MORE_CREATORS,
-                                        mActorList: value.mCreatorsLists,
-                                      )
-                                    : Container(),
+                                Selector<MovieDetailsBloc, List<CreditVO>?>(
+                                  selector: (BuildContext context,
+                                          movieDetailsBloc) =>
+                                      movieDetailsBloc.mCreatorsLists,
+                                  builder: (BuildContext context,
+                                      mCreatorsLists, Widget? child) {
+                                    return (mCreatorsLists != null &&
+                                            mCreatorsLists.isNotEmpty)
+                                        ? ActorsAndCreatorsView(
+                                            MOVIE_DETAILS_CREATORS,
+                                            MOVIE_DETAILS_MORE_CREATORS,
+                                            mActorList: mCreatorsLists,
+                                          )
+                                        : Container();
+                                  },
+                                ),
                               ],
                             ),
                           ),

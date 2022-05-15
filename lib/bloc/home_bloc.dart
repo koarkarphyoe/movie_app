@@ -41,7 +41,7 @@ class HomeBloc extends ChangeNotifier {
 
     mModel.getGenresFromDatabase()?.listen((event) {
       mGenreList = event;
-      if (mGenreList != null) {
+      if (mGenreList != null && mGenreList!.isNotEmpty) {
         _getMoviesGenreAndRefresh(mGenreList!.first.id);
       } else {
         [];
