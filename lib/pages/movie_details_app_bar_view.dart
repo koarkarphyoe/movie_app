@@ -63,7 +63,8 @@ class MovieDetailsPage extends StatelessWidget {
                                   padding: EdgeInsets.all(MARGIN_MEDIUM_LARGE),
                                   child: AboutFilmSectionView(value.mMovie),
                                 ),
-                                (value.mCreatorsLists != null&&value.mCreatorsLists!.isNotEmpty)
+                                (value.mCreatorsLists != null &&
+                                        value.mCreatorsLists!.isNotEmpty)
                                     ? ActorsAndCreatorsView(
                                         MOVIE_DETAILS_CREATORS,
                                         MOVIE_DETAILS_MORE_CREATORS,
