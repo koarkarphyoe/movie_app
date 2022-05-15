@@ -41,37 +41,28 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
-        body: Container(
-          color: SCREEN_BODY_BACKGROUND_COLOR,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ///Need to care banner count! => mResults?.take(8).toList()
-                Consumer<HomeBloc>(
-                  builder: (BuildContext context, bloc, Widget? child) {
-                    return BannerSectionView(
+        body: Consumer<HomeBloc>(
+          builder: (BuildContext context, value, Widget? child) {
+            return Container(
+              color: SCREEN_BODY_BACKGROUND_COLOR,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    BannerSectionView(
                       mPopularMovieList:
-                          bloc.mNowPlayingMovieList?.take(8).toList(),
-                    );
-                  },
-                ),
-                SizedBox(height: MARGIN_MEDIUM),
-                Consumer<HomeBloc>(
-                  builder: (BuildContext context, value, Widget? child) {
-                    return BestPopularMoviesAndSerialsSectionView(
+                          value.mNowPlayingMovieList?.take(8).toList(),
+                    ),
+                    SizedBox(height: MARGIN_MEDIUM),
+                    BestPopularMoviesAndSerialsSectionView(
                       (movieId) =>
                           _navigateToMovieDetailsPage(context, movieId),
                       value.mPopularMovieList,
-                    );
-                  },
-                ),
-                SizedBox(height: MARGIN_MEDIUM),
-                MovieShowtimesSectionView(),
-                SizedBox(height: MARGIN_MEDIUM),
-                Consumer<HomeBloc>(
-                  builder: (BuildContext context, value, Widget? child) {
-                    return GenreSectionView(
+                    ),
+                    SizedBox(height: MARGIN_MEDIUM),
+                    MovieShowtimesSectionView(),
+                    SizedBox(height: MARGIN_MEDIUM),
+                    GenreSectionView(
                       (movieId) =>
                           _navigateToMovieDetailsPage(context, movieId),
                       value.mGenreList,
@@ -79,29 +70,21 @@ class HomePage extends StatelessWidget {
                       onTapGenre: (int genreId) {
                         value.onTapGenre(genreId);
                       },
-                    );
-                  },
-                ),
-                SizedBox(height: MARGIN_MEDIUM),
-                Consumer<HomeBloc>(
-                  builder: (BuildContext context, value, Widget? child) {
-                    return ShowCasesSectionView(value.topRated);
-                  },
-                ),
-                SizedBox(height: MARGIN_MEDIUM_XLARGE),
-                Consumer<HomeBloc>(
-                  builder: (BuildContext context, value, Widget? child) {
-                    return ActorsAndCreatorsView(
+                    ),
+                    SizedBox(height: MARGIN_MEDIUM),
+                    ShowCasesSectionView(value.topRated),
+                    SizedBox(height: MARGIN_MEDIUM_XLARGE),
+                    ActorsAndCreatorsView(
                       BEST_ACTORS_TEXT,
                       MORE_ACTORS_TEXT,
                       mActorList: value.mActorList,
-                    );
-                  },
+                    ),
+                    SizedBox(height: MARGIN_MEDIUM),
+                  ],
                 ),
-                SizedBox(height: MARGIN_MEDIUM),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         ),
       ),
     );
