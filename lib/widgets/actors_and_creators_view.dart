@@ -22,7 +22,9 @@ class ActorsAndCreatorsView extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_LARGE),
-            child: TitleTextWithMoreShowCases(titleText, showMoreText),
+            child: (showMoreTextVisility)
+                ? TitleTextWithMoreShowCases(titleText, showMoreText)
+                : TitleTextWithMoreShowCases(titleText, ""),
           ),
           SizedBox(height: MARGIN_MEDIUM),
           Container(

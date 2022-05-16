@@ -64,7 +64,7 @@ class MovieDetailsPage extends StatelessWidget {
                                       Widget? child) {
                                     return ActorsAndCreatorsView(
                                       MOVIE_DETAILS_ACTORS,
-                                      MOVIE_DETAILS_MORE_CREATORS,
+                                      MORE_ACTORS_TEXT,
                                       showMoreTextVisility: false,
                                       mActorList: mActorLists,
                                     );
